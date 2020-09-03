@@ -7,6 +7,7 @@
 
 class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
+    , public juce::Slider::Listener
 {
 public:
     ReverbAudioProcessorEditor (ReverbAudioProcessor&);
@@ -15,12 +16,18 @@ public:
     ~ReverbAudioProcessorEditor() override;
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    //juce::Slider
+    void sliderValueChanged (juce::Slider* slider) override {};
 
 private:
-
     void AddCommonPluginBackground(juce::Graphics &g);
+    
+    void AddGainSlider();
+    void SetGainSliderBounds();
 
     ReverbAudioProcessor& audioProcessor;
+    std::unique_ptr<juce::Slider> gainSlider;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };
