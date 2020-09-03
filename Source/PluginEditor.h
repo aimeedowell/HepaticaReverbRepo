@@ -24,11 +24,13 @@ private:
     void AddCommonPluginBackground(juce::Graphics &g);
     
     void AddGainSlider();
+    void AddGainSliderLabel();
     void SetGainSliderBounds();
     void SetGainSliderColour();
 
     ReverbAudioProcessor& audioProcessor;
     std::unique_ptr<juce::Slider> gainSlider;
+    std::unique_ptr<juce::Label> gainSliderLabel;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };
