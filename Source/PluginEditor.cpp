@@ -16,6 +16,8 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
 
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
+    gainSlider.reset();
+    gainSliderLabel.reset();
 }
 
 void ReverbAudioProcessorEditor::paint (juce::Graphics &g)
