@@ -15,7 +15,7 @@ PitchShiftAudioProcessorEditor::~PitchShiftAudioProcessorEditor()
 
 void PitchShiftAudioProcessorEditor::paint (juce::Graphics &g)
 {
-    addCommonPluginBackground(g);
+    AddCommonPluginBackground(g);
 }
 
 void PitchShiftAudioProcessorEditor::resized()
@@ -24,7 +24,7 @@ void PitchShiftAudioProcessorEditor::resized()
     // subcomponents in your editor..
 }
 
-void PitchShiftAudioProcessorEditor::addCommonPluginBackground(juce::Graphics &g)
+void PitchShiftAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
 {
     juce::Image background = juce::ImageCache::getFromMemory (BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
     

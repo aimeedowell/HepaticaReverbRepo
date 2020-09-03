@@ -18,7 +18,7 @@ public:
 
 private:
 
-    void addCommonPluginBackground(juce::Graphics &g);
+    void AddCommonPluginBackground(juce::Graphics &g);
 
     PitchShiftAudioProcessor& audioProcessor;
     
