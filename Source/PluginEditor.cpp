@@ -46,6 +46,17 @@ void ReverbAudioProcessorEditor::AddGainSlider()
     SetGainSliderColour();
 }
 
+void ReverbAudioProcessorEditor::SetGainSliderColour()
+{
+    juce::uint8 red = 109;
+    juce::uint8 green = 0;
+    juce::uint8 blue = 181;
+    auto transparent = juce::Colour(red, green, blue, 0.0f);
+    
+    gainSlider->setColour(juce::Slider::backgroundColourId, juce::Colour(red, green, blue, 0.4f));
+    gainSlider->setColour(juce::Slider::thumbColourId, juce::Colour(red, green, blue));
+    gainSlider->setColour(juce::Slider::trackColourId, transparent);
+}
 void ReverbAudioProcessorEditor::SetGainSliderBounds()
 {
     auto width = getWidth();

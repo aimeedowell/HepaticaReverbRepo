@@ -25,6 +25,7 @@ private:
     
     void AddGainSlider();
     void SetGainSliderBounds();
+    void SetGainSliderColour();
 
     ReverbAudioProcessor& audioProcessor;
     std::unique_ptr<juce::Slider> gainSlider;
