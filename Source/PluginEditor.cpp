@@ -3,28 +3,28 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-PitchShiftAudioProcessorEditor::PitchShiftAudioProcessorEditor (PitchShiftAudioProcessor& p)
+ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     setSize (830, 350);
 }
 
-PitchShiftAudioProcessorEditor::~PitchShiftAudioProcessorEditor()
+ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
 }
 
-void PitchShiftAudioProcessorEditor::paint (juce::Graphics &g)
+void ReverbAudioProcessorEditor::paint (juce::Graphics &g)
 {
     AddCommonPluginBackground(g);
 }
 
-void PitchShiftAudioProcessorEditor::resized()
+void ReverbAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
 
-void PitchShiftAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
+void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
 {
     juce::Image background = juce::ImageCache::getFromMemory (BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
     

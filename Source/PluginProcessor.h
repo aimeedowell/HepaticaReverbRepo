@@ -5,12 +5,12 @@
 #include <JuceHeader.h>
 
 
-class PitchShiftAudioProcessor  : public juce::AudioProcessor
+class ReverbAudioProcessor  : public juce::AudioProcessor
 {
 public:
-    PitchShiftAudioProcessor();
+    ReverbAudioProcessor();
     
-    ~PitchShiftAudioProcessor() override;
+    ~ReverbAudioProcessor() override;
 
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     
@@ -52,5 +52,5 @@ public:
 
 private:
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PitchShiftAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessor)
 };

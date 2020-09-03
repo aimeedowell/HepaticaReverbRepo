@@ -5,14 +5,14 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
-class PitchShiftAudioProcessorEditor
+class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
 {
 public:
-    PitchShiftAudioProcessorEditor (PitchShiftAudioProcessor&);
+    ReverbAudioProcessorEditor (ReverbAudioProcessor&);
     
     //juce::AudioProcessorEditor
-    ~PitchShiftAudioProcessorEditor() override;
+    ~ReverbAudioProcessorEditor() override;
     void paint (juce::Graphics&) override;
     void resized() override;
 
@@ -20,7 +20,7 @@ private:
 
     void AddCommonPluginBackground(juce::Graphics &g);
 
-    PitchShiftAudioProcessor& audioProcessor;
+    ReverbAudioProcessor& audioProcessor;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PitchShiftAudioProcessorEditor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };
