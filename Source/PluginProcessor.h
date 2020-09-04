@@ -51,6 +51,9 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    const juce::AudioProcessorValueTreeState::ParameterLayout CreateParameters();
+    
+    juce::AudioProcessorValueTreeState valueTreeState;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessor)
 };

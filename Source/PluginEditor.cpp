@@ -41,8 +41,6 @@ void ReverbAudioProcessorEditor::AddGainSlider()
 {
     addAndMakeVisible(gainSlider.get());
     gainSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    gainSlider->setRange(-12.0, 6.0);
-    gainSlider->setValue(0.0);
     gainSlider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     gainSlider->setDoubleClickReturnValue(true, 0.0);
     gainSlider->addListener(this);

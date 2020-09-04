@@ -14,6 +14,7 @@ ReverbAudioProcessor::ReverbAudioProcessor()
                      #endif
                        )
 #endif
+    , valueTreeState(*this, nullptr, "Parameters", CreateParameters())
 {
 }
 
@@ -149,6 +150,17 @@ void ReverbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 
 void ReverbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::CreateParameters()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gainID", // parameterID
+                                                                     "Gain",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 3.0f, 0.01f, 0.5f), // min, max, stepsize, skew factor
+                                                                     1.0f));  // default value)
+    
+    return { parameters.begin(), parameters.end() };
+}
 
 }
 
