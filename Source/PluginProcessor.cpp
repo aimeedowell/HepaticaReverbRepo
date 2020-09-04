@@ -5,15 +5,16 @@
 
 ReverbAudioProcessor::ReverbAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
-     : AudioProcessor (BusesProperties()
+     : AudioProcessor(BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
                       #if ! JucePlugin_IsSynth
-                       .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
+                       .withInput("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
-                       .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
+                       .withOutput("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
                        )
 #endif
+    , valueTreeState(*this, nullptr, "Parameters", CreateParameters())
 {
 }
 
@@ -68,20 +69,20 @@ int ReverbAudioProcessor::getCurrentProgram()
     return 0;
 }
 
-void ReverbAudioProcessor::setCurrentProgram (int index)
+void ReverbAudioProcessor::setCurrentProgram(int index)
 {
 }
 
-const juce::String ReverbAudioProcessor::getProgramName (int index)
+const juce::String ReverbAudioProcessor::getProgramName(int index)
 {
     return {};
 }
 
-void ReverbAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void ReverbAudioProcessor::changeProgramName(int index, const juce::String& newName)
 {
 }
 
-void ReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void ReverbAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 
 }
@@ -92,7 +93,7 @@ void ReverbAudioProcessor::releaseResources()
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool ReverbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ReverbAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -115,7 +116,7 @@ bool ReverbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) c
 }
 #endif
 
-void ReverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void ReverbAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -123,6 +124,8 @@ void ReverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    AddGainProcessing(buffer);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -142,14 +145,38 @@ juce::AudioProcessorEditor* ReverbAudioProcessor::createEditor()
     return new ReverbAudioProcessorEditor (*this);
 }
 
-void ReverbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ReverbAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-
+    juce::MemoryOutputStream(destData, true).writeFloat(*valueTreeState.getRawParameterValue("gainID"));
 }
 
-void ReverbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ReverbAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
+    *valueTreeState.getRawParameterValue("gainID") = juce::MemoryInputStream(data, static_cast<size_t>(sizeInBytes), false).readFloat();
+}
 
+juce::AudioProcessorValueTreeState &ReverbAudioProcessor::GetValueTreeState()
+{
+    return valueTreeState;
+}
+
+const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::CreateParameters()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+    
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("gainID", // parameterID
+                                                                     "Gain",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 3.0f, 0.01f, 0.5f), // min, max, stepsize, skew factor
+                                                                     1.0f));  // default value)
+    
+    return { parameters.begin(), parameters.end() };
+}
+
+void ReverbAudioProcessor::AddGainProcessing(juce::AudioBuffer<float>& buffer)
+{
+    float currentGainValue = *valueTreeState.getRawParameterValue("gainID");
+
+    buffer.applyGain(currentGainValue);
 }
 
 //==============================================================================

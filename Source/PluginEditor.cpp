@@ -3,8 +3,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
+    : AudioProcessorEditor (&p)
+    , audioProcessor (p)
     , gainSlider(std::make_unique<juce::Slider>())
     , gainSliderLabel(std::make_unique<juce::Label>())
 {
@@ -16,11 +17,12 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
 
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
+    gainSliderAttachment.reset(); //Delete this before gainSlider is deleted else the attachment has no idea what it's dettaching from!!!
     gainSlider.reset();
     gainSliderLabel.reset();
 }
 
-void ReverbAudioProcessorEditor::paint (juce::Graphics &g)
+void ReverbAudioProcessorEditor::paint(juce::Graphics &g)
 {
     AddCommonPluginBackground(g);
 }
@@ -41,11 +43,12 @@ void ReverbAudioProcessorEditor::AddGainSlider()
 {
     addAndMakeVisible(gainSlider.get());
     gainSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    gainSlider->setRange(-12.0, 6.0);
-    gainSlider->setValue(0.0);
     gainSlider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     gainSlider->setDoubleClickReturnValue(true, 0.0);
     gainSlider->addListener(this);
+    gainSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                             , "gainID"
+                                                                             , *gainSlider.get());
     
     SetGainSliderColour();
 }
