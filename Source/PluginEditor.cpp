@@ -16,6 +16,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
 
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
+    gainSliderAttachment.reset(); //Delete this before gainSlider is deleted else the attachment has no idea what it's dettaching from!!!
     gainSlider.reset();
     gainSliderLabel.reset();
 }
@@ -44,6 +45,9 @@ void ReverbAudioProcessorEditor::AddGainSlider()
     gainSlider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     gainSlider->setDoubleClickReturnValue(true, 0.0);
     gainSlider->addListener(this);
+    gainSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                             , "gainID"
+                                                                             , *gainSlider.get());
     
     SetGainSliderColour();
 }
