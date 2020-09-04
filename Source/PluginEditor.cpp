@@ -3,8 +3,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-ReverbAudioProcessorEditor::ReverbAudioProcessorEditor (ReverbAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
+    : AudioProcessorEditor (&p)
+    , audioProcessor (p)
     , gainSlider(std::make_unique<juce::Slider>())
     , gainSliderLabel(std::make_unique<juce::Label>())
 {
@@ -21,7 +22,7 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     gainSliderLabel.reset();
 }
 
-void ReverbAudioProcessorEditor::paint (juce::Graphics &g)
+void ReverbAudioProcessorEditor::paint(juce::Graphics &g)
 {
     AddCommonPluginBackground(g);
 }

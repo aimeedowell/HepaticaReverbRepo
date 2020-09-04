@@ -10,15 +10,15 @@ class ReverbAudioProcessorEditor
     , public juce::Slider::Listener
 {
 public:
-    ReverbAudioProcessorEditor (ReverbAudioProcessor&);
+    ReverbAudioProcessorEditor(ReverbAudioProcessor&);
     
     //juce::AudioProcessorEditor
     ~ReverbAudioProcessorEditor() override;
-    void paint (juce::Graphics&) override;
+    void paint(juce::Graphics&) override;
     void resized() override;
     
     //juce::Slider
-    void sliderValueChanged (juce::Slider* slider) override {};
+    void sliderValueChanged(juce::Slider* slider) override {};
 
 private:
     void AddCommonPluginBackground(juce::Graphics &g);
