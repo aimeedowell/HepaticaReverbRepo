@@ -124,6 +124,8 @@ void ReverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce:
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
+    
+    AddGainProcessing(buffer);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -167,6 +169,11 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
     return { parameters.begin(), parameters.end() };
 }
 
+void ReverbAudioProcessor::AddGainProcessing(juce::AudioBuffer<float>& buffer)
+{
+    float currentGainValue = *valueTreeState.getRawParameterValue("gainID");
+
+    buffer.applyGain(currentGainValue);
 }
 
 //==============================================================================

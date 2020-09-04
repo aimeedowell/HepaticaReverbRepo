@@ -51,6 +51,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     juce::AudioProcessorValueTreeState &GetValueTreeState();
+    
+    void AddGainProcessing(juce::AudioBuffer<float>& buffer);
 
 private:
     const juce::AudioProcessorValueTreeState::ParameterLayout CreateParameters();
