@@ -150,6 +150,11 @@ void ReverbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 
 void ReverbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
+juce::AudioProcessorValueTreeState &ReverbAudioProcessor::GetValueTreeState()
+{
+    return valueTreeState;
+}
+
 const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::CreateParameters()
 {
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
