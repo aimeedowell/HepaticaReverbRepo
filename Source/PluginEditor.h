@@ -5,22 +5,32 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
-class PitchShiftAudioProcessorEditor
+class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
+    , public juce::Slider::Listener
 {
 public:
-    PitchShiftAudioProcessorEditor (PitchShiftAudioProcessor&);
+    ReverbAudioProcessorEditor (ReverbAudioProcessor&);
     
     //juce::AudioProcessorEditor
-    ~PitchShiftAudioProcessorEditor() override;
+    ~ReverbAudioProcessorEditor() override;
     void paint (juce::Graphics&) override;
     void resized() override;
+    
+    //juce::Slider
+    void sliderValueChanged (juce::Slider* slider) override {};
 
 private:
-
     void AddCommonPluginBackground(juce::Graphics &g);
-
-    PitchShiftAudioProcessor& audioProcessor;
     
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PitchShiftAudioProcessorEditor)
+    void AddGainSlider();
+    void AddGainSliderLabel();
+    void SetGainSliderBounds();
+    void SetGainSliderColour();
+
+    ReverbAudioProcessor& audioProcessor;
+    std::unique_ptr<juce::Slider> gainSlider;
+    std::unique_ptr<juce::Label> gainSliderLabel;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };

@@ -3,7 +3,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-PitchShiftAudioProcessor::PitchShiftAudioProcessor()
+ReverbAudioProcessor::ReverbAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor (BusesProperties()
                      #if ! JucePlugin_IsMidiEffect
@@ -17,16 +17,16 @@ PitchShiftAudioProcessor::PitchShiftAudioProcessor()
 {
 }
 
-PitchShiftAudioProcessor::~PitchShiftAudioProcessor()
+ReverbAudioProcessor::~ReverbAudioProcessor()
 {
 }
 
-const juce::String PitchShiftAudioProcessor::getName() const
+const juce::String ReverbAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
 
-bool PitchShiftAudioProcessor::acceptsMidi() const
+bool ReverbAudioProcessor::acceptsMidi() const
 {
    #if JucePlugin_WantsMidiInput
     return true;
@@ -35,7 +35,7 @@ bool PitchShiftAudioProcessor::acceptsMidi() const
    #endif
 }
 
-bool PitchShiftAudioProcessor::producesMidi() const
+bool ReverbAudioProcessor::producesMidi() const
 {
    #if JucePlugin_ProducesMidiOutput
     return true;
@@ -44,7 +44,7 @@ bool PitchShiftAudioProcessor::producesMidi() const
    #endif
 }
 
-bool PitchShiftAudioProcessor::isMidiEffect() const
+bool ReverbAudioProcessor::isMidiEffect() const
 {
    #if JucePlugin_IsMidiEffect
     return true;
@@ -53,46 +53,46 @@ bool PitchShiftAudioProcessor::isMidiEffect() const
    #endif
 }
 
-double PitchShiftAudioProcessor::getTailLengthSeconds() const
+double ReverbAudioProcessor::getTailLengthSeconds() const
 {
     return 0.0;
 }
 
-int PitchShiftAudioProcessor::getNumPrograms()
+int ReverbAudioProcessor::getNumPrograms()
 {
     return 1;
 }
 
-int PitchShiftAudioProcessor::getCurrentProgram()
+int ReverbAudioProcessor::getCurrentProgram()
 {
     return 0;
 }
 
-void PitchShiftAudioProcessor::setCurrentProgram (int index)
+void ReverbAudioProcessor::setCurrentProgram (int index)
 {
 }
 
-const juce::String PitchShiftAudioProcessor::getProgramName (int index)
+const juce::String ReverbAudioProcessor::getProgramName (int index)
 {
     return {};
 }
 
-void PitchShiftAudioProcessor::changeProgramName (int index, const juce::String& newName)
+void ReverbAudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
 }
 
-void PitchShiftAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
+void ReverbAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
 
 }
 
-void PitchShiftAudioProcessor::releaseResources()
+void ReverbAudioProcessor::releaseResources()
 {
 
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool PitchShiftAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
+bool ReverbAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) const
 {
   #if JucePlugin_IsMidiEffect
     juce::ignoreUnused (layouts);
@@ -115,7 +115,7 @@ bool PitchShiftAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 }
 #endif
 
-void PitchShiftAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void ReverbAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
@@ -132,22 +132,22 @@ void PitchShiftAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     }
 }
 
-bool PitchShiftAudioProcessor::hasEditor() const
+bool ReverbAudioProcessor::hasEditor() const
 {
     return true;
 }
 
-juce::AudioProcessorEditor* PitchShiftAudioProcessor::createEditor()
+juce::AudioProcessorEditor* ReverbAudioProcessor::createEditor()
 {
-    return new PitchShiftAudioProcessorEditor (*this);
+    return new ReverbAudioProcessorEditor (*this);
 }
 
-void PitchShiftAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ReverbAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
 
 }
 
-void PitchShiftAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+void ReverbAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
 
 }
@@ -156,5 +156,5 @@ void PitchShiftAudioProcessor::setStateInformation (const void* data, int sizeIn
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-    return new PitchShiftAudioProcessor();
+    return new ReverbAudioProcessor();
 }
