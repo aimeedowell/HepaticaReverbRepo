@@ -4,6 +4,13 @@
               addUsingNamespaceToJuceHeader="0" companyName="Aimee Dowell"
               displaySplashScreen="1" cppLanguageStandard="latest" jucerFormatVersion="1">
   <MAINGROUP id="pB7c0w" name="Hepatica Reverb">
+    <GROUP id="{592ABEC2-B00D-EAD4-9EBA-C84885F681BC}" name="Resources">
+      <FILE id="KQlk4S" name="Hepatica.PNG" compile="0" resource="1" file="Resources/Hepatica.PNG"/>
+      <FILE id="X1UseP" name="VisualAudioMeter.PNG" compile="0" resource="1"
+            file="Resources/VisualAudioMeter.PNG"/>
+      <FILE id="kdaxxQ" name="CommonPluginBackground.PNG" compile="0" resource="1"
+            file="Resources/CommonPluginBackground.PNG"/>
+    </GROUP>
     <GROUP id="{2E39B0A5-8272-7A19-DA14-37EB518A82F9}" name="Source">
       <FILE id="jbVZyP" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
@@ -13,11 +20,6 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="RICBCS" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="j6umUM" name="CommonPluginBackground.PNG" compile="0" resource="1"
-          file="CommonPluginBackground.PNG"/>
-    <FILE id="HKYrDI" name="Hepatica.PNG" compile="0" resource="1" file="Hepatica.PNG"/>
-    <FILE id="SmgkPA" name="VisualAudioMeter.png" compile="0" resource="1"
-          file="VisualAudioMeter.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
