@@ -16,6 +16,8 @@
     <FILE id="j6umUM" name="CommonPluginBackground.PNG" compile="0" resource="1"
           file="CommonPluginBackground.PNG"/>
     <FILE id="HKYrDI" name="Hepatica.PNG" compile="0" resource="1" file="Hepatica.PNG"/>
+    <FILE id="SmgkPA" name="VisualAudioMeter.png" compile="0" resource="1"
+          file="VisualAudioMeter.png"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
