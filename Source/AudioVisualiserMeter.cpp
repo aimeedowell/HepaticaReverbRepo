@@ -29,6 +29,13 @@ AudioVisualiserMeter::AudioVisualiserMeter(ReverbAudioProcessorEditor &editor)
 AudioVisualiserMeter::~AudioVisualiserMeter()
 {
 }
+
+void AudioVisualiserMeter::paint(juce::Graphics &g)
+{
+    g.drawImage(meterImage, destX, destY, destWidth, destHeight, sourceX, sourceY, sourceWidth, sourceHeight);
+}
+
+
 const int AudioVisualiserMeter::GetHeight()
 {
     return maxMeterHeight;
