@@ -15,6 +15,7 @@ ReverbAudioProcessor::ReverbAudioProcessor()
                )
 #endif
 , valueTreeState(*this, nullptr, "Parameters", CreateParameters())
+, bufferAmplitude({0.0f, 0.0f})
 {
 }
 
@@ -131,7 +132,10 @@ void ReverbAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
     {
         //auto* channelData = buffer.getWritePointer (channel);
 
-        // ..do something to the data...
+        if (channel == 0)
+            bufferAmplitude[0] = buffer.getMagnitude(channel, 0, buffer.getNumSamples());
+        else if (channel == 1)
+            bufferAmplitude[1] = buffer.getMagnitude(channel, 0, buffer.getNumSamples());
     }
 }
 
@@ -177,6 +181,11 @@ void ReverbAudioProcessor::AddGainProcessing(juce::AudioBuffer<float>& buffer)
     float currentGainValue = *valueTreeState.getRawParameterValue("gainID");
 
     buffer.applyGain(currentGainValue);
+}
+
+std::vector<float> &ReverbAudioProcessor::GetAmplitudeLevel()
+{
+    return bufferAmplitude;
 }
 
 //==============================================================================
