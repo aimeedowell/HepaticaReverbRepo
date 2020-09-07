@@ -55,11 +55,15 @@ public:
     juce::AudioProcessorValueTreeState &GetValueTreeState();
     
     void AddGainProcessing(juce::AudioBuffer<float>& buffer);
+    
+    std::vector<float> &GetAmplitudeLevel();
 
 private:
     const juce::AudioProcessorValueTreeState::ParameterLayout CreateParameters();
     
     juce::AudioProcessorValueTreeState valueTreeState;
+    
+    std::vector<float> bufferAmplitude;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessor)
 };
