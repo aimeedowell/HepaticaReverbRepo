@@ -30,6 +30,8 @@ public:
     
     int GetYPosition();
     
+    void AddAmplitudeToBuffer(float amplitudeValue);
+    
 private:
     void InitialiseAudioVisualiser();
     

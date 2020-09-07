@@ -47,6 +47,10 @@ void ReverbAudioProcessorEditor::resized()
 
 void ReverbAudioProcessorEditor::timerCallback()
 {
+    auto amplitudeVector = audioProcessor.GetAmplitudeLevel();
+    
+    leftAudioMeter.get()->AddAmplitudeToBuffer(amplitudeVector[0]);
+    rightAudioMeter.get()->AddAmplitudeToBuffer(amplitudeVector[1]);
 }
 
 void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)

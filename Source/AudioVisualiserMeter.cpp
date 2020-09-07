@@ -58,5 +58,15 @@ int AudioVisualiserMeter::GetYPosition()
     sourceHeight = meterImage.getHeight();
     
     setSize(meterWidth, maxMeterHeight);
+void AudioVisualiserMeter::AddAmplitudeToBuffer(float amplitudeValue)
+{
+    amplitudeBuffer.push_back(amplitudeValue);
+
+    if (amplitudeBuffer.size() > 0)
+    {
+        UpdateAudioVisualiserHeight(amplitudeValue);
+        amplitudeBuffer.pop_back();
+    }
+}
     repaint();
 }
