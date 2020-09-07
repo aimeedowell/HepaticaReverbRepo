@@ -4,10 +4,10 @@
 #include "PluginEditor.h"
 
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
-    : AudioProcessorEditor (&p)
-    , audioProcessor (p)
-    , gainSlider(std::make_unique<juce::Slider>())
-    , gainSliderLabel(std::make_unique<juce::Label>())
+: AudioProcessorEditor (&p)
+, audioProcessor (p)
+, gainSlider(std::make_unique<juce::Slider>())
+, gainSliderLabel(std::make_unique<juce::Label>())
 {
     setSize (830, 350);
     
@@ -34,7 +34,7 @@ void ReverbAudioProcessorEditor::resized()
 
 void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
 {
-    juce::Image background = juce::ImageCache::getFromMemory (BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
+    juce::Image background = juce::ImageCache::getFromMemory(BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
     
     g.drawImageWithin(background, 0, 0, getWidth() ,getHeight(), false);
 }
