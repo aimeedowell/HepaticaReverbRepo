@@ -29,6 +29,21 @@ AudioVisualiserMeter::AudioVisualiserMeter(ReverbAudioProcessorEditor &editor)
 AudioVisualiserMeter::~AudioVisualiserMeter()
 {
 }
+const int AudioVisualiserMeter::GetHeight()
+{
+    return maxMeterHeight;
+}
+
+const int AudioVisualiserMeter::GetWidth()
+{
+    return meterWidth;
+}
+
+int AudioVisualiserMeter::GetYPosition()
+{
+    return externalY;
+}
+
  void AudioVisualiserMeter::InitialiseAudioVisualiser()
 {
     destHeight = maxMeterHeight;

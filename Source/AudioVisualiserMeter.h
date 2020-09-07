@@ -23,6 +23,13 @@ public:
     //juce::Component
     void paint(juce::Graphics&) override;
     void resized() override {};
+    
+    const int GetHeight();
+    
+    const int GetWidth();
+    
+    int GetYPosition();
+    
 private:
     void InitialiseAudioVisualiser();
     
