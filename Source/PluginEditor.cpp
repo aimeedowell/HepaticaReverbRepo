@@ -3,23 +3,33 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "AudioVisualiserMeter.h"
+
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
 , audioProcessor (p)
 , gainSlider(std::make_unique<juce::Slider>())
 , gainSliderLabel(std::make_unique<juce::Label>())
+, leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
+, rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 {
     setSize (830, 350);
     
     AddGainSlider();
     AddGainSliderLabel();
+    AddAudioVisualiser();
+    
+    startTimer(10);
 }
 
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
+    stopTimer();
     gainSliderAttachment.reset(); //Delete this before gainSlider is deleted else the attachment has no idea what it's dettaching from!!!
     gainSlider.reset();
     gainSliderLabel.reset();
+    leftAudioMeter.reset();
+    rightAudioMeter.reset();
 }
 
 void ReverbAudioProcessorEditor::paint(juce::Graphics &g)
@@ -33,6 +43,10 @@ void ReverbAudioProcessorEditor::resized()
     auto height = getHeight();
     
     SetGainSliderBounds(width, height);
+}
+
+void ReverbAudioProcessorEditor::timerCallback()
+{
 }
 
 void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
@@ -82,4 +96,10 @@ void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
 {
     gainSlider->setBounds(width - 150, 20 , 60, 300);
     gainSliderLabel->setBounds(width - 140, height - 40, 40, 30);
+}
+
+void ReverbAudioProcessorEditor::AddAudioVisualiser()
+{
+    addAndMakeVisible(leftAudioMeter.get());
+    addAndMakeVisible(rightAudioMeter.get());
 }
