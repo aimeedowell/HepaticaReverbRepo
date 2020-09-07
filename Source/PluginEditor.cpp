@@ -107,3 +107,18 @@ void ReverbAudioProcessorEditor::AddAudioVisualiser()
     addAndMakeVisible(leftAudioMeter.get());
     addAndMakeVisible(rightAudioMeter.get());
 }
+
+void ReverbAudioProcessorEditor::SetAudioVisualiserBounds(AudioVisualiserMeter *meter)
+{
+    auto yPosition = meter->GetYPosition();
+    auto meterWidth = meter->GetWidth();
+    auto meterHeight = meter->GetHeight();
+    auto meterPosition = 0;
+
+    if (meter == leftAudioMeter.get())
+        meterPosition = 110;
+    else if (meter == rightAudioMeter.get())
+        meterPosition = 90;
+    
+    meter->setBounds(getWidth() - meterPosition, 30 + yPosition, meterWidth, meterHeight);
+}

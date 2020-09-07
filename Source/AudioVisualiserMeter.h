@@ -35,6 +35,8 @@ public:
 private:
     void InitialiseAudioVisualiser();
     
+    void UpdateAudioVisualiserHeight(float amplitudeValue);
+    
     ReverbAudioProcessorEditor &editor;
     juce::Image meterImage;
     std::vector<float> amplitudeBuffer;

@@ -58,6 +58,10 @@ int AudioVisualiserMeter::GetYPosition()
     sourceHeight = meterImage.getHeight();
     
     setSize(meterWidth, maxMeterHeight);
+    UpdateAudioVisualiserHeight(0.0f);
+    repaint();
+}
+
 void AudioVisualiserMeter::AddAmplitudeToBuffer(float amplitudeValue)
 {
     amplitudeBuffer.push_back(amplitudeValue);
@@ -68,5 +72,17 @@ void AudioVisualiserMeter::AddAmplitudeToBuffer(float amplitudeValue)
         amplitudeBuffer.pop_back();
     }
 }
+
+ void AudioVisualiserMeter::UpdateAudioVisualiserHeight(float amplitudeValue)
+{
+    if (amplitudeValue < 0 || amplitudeValue > 1)
+        return;
+        
+    sourceY = meterImage.getHeight() * (1 - amplitudeValue); // Where to start cropping original image height wise
+    externalY = maxMeterHeight * (1 - amplitudeValue);       // Where to start drawing new image in editor (gap from top + this value)
+    sourceHeight = meterImage.getHeight() * amplitudeValue;  // How long should the crop be?
+    destHeight = maxMeterHeight * amplitudeValue;            // How long should the crop be?
+    
+    editor.SetAudioVisualiserBounds(this);
     repaint();
 }

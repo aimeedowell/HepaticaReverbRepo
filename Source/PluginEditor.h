@@ -26,6 +26,7 @@ public:
     //juce::Timer
     void timerCallback() override;
     
+    void SetAudioVisualiserBounds(AudioVisualiserMeter *meter); //This is a public method as it gets updated by AudioVisualiserMeter
 
 private:
     void AddCommonPluginBackground(juce::Graphics &g);
