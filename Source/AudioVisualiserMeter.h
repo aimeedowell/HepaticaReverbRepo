@@ -24,6 +24,23 @@ public:
     void paint(juce::Graphics&) override;
     void resized() override {};
 private:
+    void InitialiseAudioVisualiser();
+    
     ReverbAudioProcessorEditor &editor;
+    juce::Image meterImage;
+    std::vector<float> amplitudeBuffer;
+
+    const float meterWidth;
+    const float maxMeterHeight;
+    
+    const int destX;
+    const int destY;
+    const int destWidth;
+    const int sourceX;
+    const int sourceWidth;
+    int destHeight;
+    int sourceY;
+    int sourceHeight;
+    int externalY;
 };
 #endif /* AudioVisualiserMeter_h */
