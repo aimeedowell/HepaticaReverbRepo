@@ -29,7 +29,10 @@ void ReverbAudioProcessorEditor::paint(juce::Graphics &g)
 
 void ReverbAudioProcessorEditor::resized()
 {
-    SetGainSliderBounds();
+    auto width = getWidth();
+    auto height = getHeight();
+    
+    SetGainSliderBounds(width, height);
 }
 
 void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
@@ -75,10 +78,8 @@ void ReverbAudioProcessorEditor::AddGainSliderLabel()
     gainSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
 }
 
-void ReverbAudioProcessorEditor::SetGainSliderBounds()
+void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
 {
-    auto width = getWidth();
-    auto height = getHeight();
     gainSlider->setBounds(width - 150, 20 , 60, 300);
     gainSliderLabel->setBounds(width - 140, height - 40, 40, 30);
 }

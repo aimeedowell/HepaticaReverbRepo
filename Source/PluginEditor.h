@@ -25,7 +25,7 @@ private:
     
     void AddGainSlider();
     void AddGainSliderLabel();
-    void SetGainSliderBounds();
+    void SetGainSliderBounds(int width, int height);
     void SetGainSliderColour();
 
     ReverbAudioProcessor& audioProcessor;
