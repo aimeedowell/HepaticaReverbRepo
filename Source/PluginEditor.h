@@ -62,9 +62,11 @@ private:
     
     std::unique_ptr<juce::Slider> decaySlider;
     std::unique_ptr<juce::Label> decaySliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> decaySliderAttachment;
     
     std::unique_ptr<juce::Slider> widthSlider;
     std::unique_ptr<juce::Label> widthSliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> widthSliderAttachment;
     
     std::unique_ptr<juce::Slider> reverbSizeSlider;
     std::unique_ptr<juce::Label> reverbSizeSliderLabel;

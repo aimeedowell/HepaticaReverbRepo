@@ -122,6 +122,10 @@ void ReverbAudioProcessorEditor::AddDecaySlider()
     decaySlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     decaySlider->setDoubleClickReturnValue(true, 0.0);
     decaySlider->addListener(this);
+    decaySliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                             , "decayID"
+                                                                             , *decaySlider.get());
+    
 }
 
 void ReverbAudioProcessorEditor::AddWidthSlider()
@@ -133,6 +137,9 @@ void ReverbAudioProcessorEditor::AddWidthSlider()
     widthSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     widthSlider->setDoubleClickReturnValue(true, 0.0);
     widthSlider->addListener(this);
+    widthSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                             , "widthID"
+                                                                             , *widthSlider.get());
     
 }
 
