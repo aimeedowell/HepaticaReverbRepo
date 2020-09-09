@@ -11,6 +11,10 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , reverbLookAndFeel(CustomLookAndFeel())
 , gainSlider(std::make_unique<juce::Slider>())
 , gainSliderLabel(std::make_unique<juce::Label>())
+, decaySlider(std::make_unique<juce::Slider>())
+, decaySliderLabel(std::make_unique<juce::Label>())
+, widthSlider(std::make_unique<juce::Slider>())
+, widthSliderLabel(std::make_unique<juce::Label>())
 , reverbSizeSlider(std::make_unique<juce::Slider>())
 , reverbSizeSliderLabel(std::make_unique<juce::Label>())
 , preDelaySlider(std::make_unique<juce::Slider>())
@@ -25,6 +29,8 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     setSize (830, 350);
     
     AddGainSlider();
+    AddDecaySlider();
+    AddWidthSlider();
     AddReverbSizeSlider();
     AddPreDelaySlider();
     AddEarlyReflectionsSlider();
@@ -39,12 +45,21 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     gainSliderAttachment.reset(); //Delete parameter attachments before component is deleted else the attachment has no idea what it's dettaching from!!!
     gainSlider.reset();
     gainSliderLabel.reset();
+    decaySliderAttachment.reset();
+    decaySlider.reset();
+    decaySliderLabel.reset();
+    widthSliderAttachment.reset();
+    widthSlider.reset();
+    widthSliderLabel.reset();
     reverbSizeSliderAttachment.reset();
     reverbSizeSlider.reset();
+    reverbSizeSliderLabel.reset();
     preDelaySliderAttachment.reset();
     preDelaySlider.reset();
+    preDelaySliderLabel.reset();
     earlyReflectionsSliderAttachment.reset();
     earlyReflectionsSlider.reset();
+    earlyReflectionsSliderLabel.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
     setLookAndFeel(nullptr);
@@ -61,6 +76,8 @@ void ReverbAudioProcessorEditor::resized()
     auto height = getHeight();
     
     SetGainSliderBounds(width, height);
+    SetDecaySliderBounds(width, height);
+    SetWidthSliderBounds(width, height);
     SetReverbSizeSliderBounds(width, height);
     SetPreDelaySliderBounds(width, height);
     SetEarlyReflectionsSliderBounds(width, height);
@@ -96,13 +113,45 @@ void ReverbAudioProcessorEditor::AddGainSlider()
     
 }
 
+void ReverbAudioProcessorEditor::AddDecaySlider()
 {
+    addAndMakeVisible(decaySlider.get());
+    addAndMakeVisible(decaySliderLabel.get());
+    decaySliderLabel->setText("Decay", juce::dontSendNotification);
+    decaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    decaySlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    decaySlider->setDoubleClickReturnValue(true, 0.0);
+    decaySlider->addListener(this);
+}
+
+void ReverbAudioProcessorEditor::AddWidthSlider()
+{
+    addAndMakeVisible(widthSlider.get());
+    addAndMakeVisible(widthSliderLabel.get());
+    widthSliderLabel->setText("Width", juce::dontSendNotification);
+    widthSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    widthSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    widthSlider->setDoubleClickReturnValue(true, 0.0);
+    widthSlider->addListener(this);
+    
 }
 
 void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
 {
     gainSlider->setBounds(680, 20 , 60, 300);
     gainSliderLabel->setBounds(690, 310, 40, 30);
+}
+
+void ReverbAudioProcessorEditor::SetDecaySliderBounds(int width, int height)
+{
+    decaySlider->setBounds(35, 50 , 60, 280);
+    decaySliderLabel->setBounds(40, 315, 40, 30);
+}
+
+void ReverbAudioProcessorEditor::SetWidthSliderBounds(int width, int height)
+{
+    widthSlider->setBounds(83, 180 , 60, 150);
+    widthSliderLabel->setBounds(90, 315, 40, 30);
 }
 
 void ReverbAudioProcessorEditor::AddReverbSizeSlider()
