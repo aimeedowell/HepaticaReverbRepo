@@ -10,6 +10,7 @@
 using namespace juce;
 
 CustomLookAndFeel::CustomLookAndFeel()
+: flowerImage(juce::ImageCache::getFromMemory(BinaryData::Hepatica_PNG, BinaryData::Hepatica_PNGSize))
 {
     
 }
@@ -127,4 +128,74 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
             }
         }
     }
+}
+
+void CustomLookAndFeel::drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
+                                       const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider)
+{
+    uint8 white = 245;
+    slider.setColour(Slider::rotarySliderFillColourId, Colour(111, 11, 224));
+    slider.setColour(Slider::rotarySliderOutlineColourId, Colour(white, white, white, 0.7f));
+    slider.setColour(Slider::thumbColourId, Colour(uint8(111), uint8(11), uint8(224), 0.0f));
+    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    
+    auto outline = slider.findColour (Slider::rotarySliderOutlineColourId);
+    auto fill    = slider.findColour (Slider::rotarySliderFillColourId);
+
+    auto bounds = Rectangle<int> (x, y, width, height).toFloat().reduced (10);
+
+    auto radius = jmin (bounds.getWidth(), bounds.getHeight()) / 2.0f;
+    auto toAngle = rotaryStartAngle + sliderPos * (rotaryEndAngle - rotaryStartAngle);
+    auto lineW = jmin (3.0f, radius * 0.3f);
+    auto arcRadius = radius - lineW * 0.3f;
+    auto centreX = (float) x + (float) width  * 0.5f;
+    auto centreY = (float) y + (float) height * 0.5f;
+
+    Path backgroundArc;
+    backgroundArc.addCentredArc (bounds.getCentreX(),
+                                 bounds.getCentreY(),
+                                 arcRadius,
+                                 arcRadius,
+                                 0.0f,
+                                 rotaryStartAngle,
+                                 rotaryEndAngle,
+                                 true);
+
+    if (slider.isEnabled())
+    {
+        Path valueArc;
+        
+        valueArc.addCentredArc (bounds.getCentreX(),
+                                bounds.getCentreY(),
+                                arcRadius,
+                                arcRadius,
+                                0.0f,
+                                rotaryStartAngle,
+                                toAngle,
+                                true);
+        
+        g.setColour (fill);
+        g.strokePath (valueArc, PathStrokeType (lineW * 4.0f, PathStrokeType::curved, PathStrokeType::rounded));
+        
+        g.setColour (outline);
+        g.strokePath (backgroundArc, PathStrokeType (lineW, PathStrokeType::curved, PathStrokeType::rounded));
+        
+        auto transform = AffineTransform::rotation(toAngle, centreX, centreY);
+        
+        float opacity;
+        opacity = slider.isMouseOverOrDragging() ? 1.0f : 0.7f;
+        g.setOpacity(opacity);
+        
+        g.addTransform(transform);
+        g.drawImageWithin(flowerImage, width/9.5, height/9.5, width/1.25, height/1.25, RectanglePlacement::stretchToFit);
+    
+    }
+    
+ 
+    auto thumbWidth = lineW;
+    Point<float> thumbPoint (bounds.getCentreX() + arcRadius * std::cos (toAngle - MathConstants<float>::halfPi),
+                             bounds.getCentreY() + arcRadius * std::sin (toAngle - MathConstants<float>::halfPi));
+
+    g.setColour (slider.findColour (Slider::thumbColourId));
+    g.fillEllipse (Rectangle<float> (thumbWidth, thumbWidth).withCentre (thumbPoint));
 }
