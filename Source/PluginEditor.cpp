@@ -25,7 +25,6 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     setSize (830, 350);
     
     AddGainSlider();
-    AddGainSliderLabel();
     AddReverbSizeSlider();
     AddPreDelaySlider();
     AddEarlyReflectionsSlider();
@@ -85,6 +84,9 @@ void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
 void ReverbAudioProcessorEditor::AddGainSlider()
 {
     addAndMakeVisible(gainSlider.get());
+    addAndMakeVisible(gainSliderLabel.get());
+    gainSliderLabel->setText("Gain", juce::dontSendNotification);
+    gainSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     gainSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     gainSlider->setDoubleClickReturnValue(true, 0.0);
     gainSlider->addListener(this);
@@ -94,19 +96,13 @@ void ReverbAudioProcessorEditor::AddGainSlider()
     
 }
 
-void ReverbAudioProcessorEditor::AddGainSliderLabel()
 {
-    juce::uint8 white = 230;
-    addAndMakeVisible(gainSliderLabel.get());
-    gainSliderLabel->setText ("Gain", juce::dontSendNotification);
-    gainSliderLabel->setJustificationType(juce::Justification::Flags::centredBottom);
-    gainSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
 }
 
 void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
 {
-    gainSlider->setBounds(width - 150, 20 , 60, 300);
-    gainSliderLabel->setBounds(width - 140, height - 40, 40, 30);
+    gainSlider->setBounds(680, 20 , 60, 300);
+    gainSliderLabel->setBounds(690, 310, 40, 30);
 }
 
 void ReverbAudioProcessorEditor::AddReverbSizeSlider()

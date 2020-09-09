@@ -34,7 +34,6 @@ private:
     void AddCommonPluginBackground(juce::Graphics &g);
     
     void AddGainSlider();
-    void AddGainSliderLabel();
     void SetGainSliderBounds(int width, int height);
     
     void AddReverbSizeSlider();
