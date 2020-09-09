@@ -107,11 +107,10 @@ void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
 
 void ReverbAudioProcessorEditor::AddReverbSizeSlider()
 {
-    juce::uint8 white = 245;
     addAndMakeVisible(reverbSizeSlider.get());
     addAndMakeVisible(reverbSizeSliderLabel.get());
     reverbSizeSliderLabel->setText("Reverb Size", juce::NotificationType::dontSendNotification);
-    reverbSizeSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
+    reverbSizeSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     reverbSizeSlider->addListener(this);
     reverbSizeSlider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     reverbSizeSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
@@ -121,11 +120,10 @@ void ReverbAudioProcessorEditor::AddReverbSizeSlider()
 
 void ReverbAudioProcessorEditor::AddPreDelaySlider()
 {
-    juce::uint8 white = 245;
     addAndMakeVisible(preDelaySlider.get());
     addAndMakeVisible(preDelaySliderLabel.get());
     preDelaySliderLabel->setText("Pre-Delay", juce::NotificationType::dontSendNotification);
-    preDelaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
+    preDelaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     preDelaySlider->addListener(this);
     preDelaySlider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     preDelaySliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
@@ -135,11 +133,10 @@ void ReverbAudioProcessorEditor::AddPreDelaySlider()
 
 void ReverbAudioProcessorEditor::AddEarlyReflectionsSlider()
 {
-    juce::uint8 white = 245;
     addAndMakeVisible(earlyReflectionsSlider.get());
     addAndMakeVisible(earlyReflectionsSliderLabel.get());
     earlyReflectionsSliderLabel->setText("Early Reflections", juce::NotificationType::dontSendNotification);
-    earlyReflectionsSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
+    earlyReflectionsSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     earlyReflectionsSlider->addListener(this);
     earlyReflectionsSlider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
     earlyReflectionsSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()

@@ -69,5 +69,7 @@ private:
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;
     
+    juce::uint8 labelColour = 245;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };
