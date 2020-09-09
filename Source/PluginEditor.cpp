@@ -64,33 +64,18 @@ void ReverbAudioProcessorEditor::AddGainSlider()
 {
     addAndMakeVisible(gainSlider.get());
     gainSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    gainSlider->setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     gainSlider->setDoubleClickReturnValue(true, 0.0);
     gainSlider->addListener(this);
     gainSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
                                                                              , "gainID"
                                                                              , *gainSlider.get());
     
-    SetGainSliderColour();
-}
-
-void ReverbAudioProcessorEditor::SetGainSliderColour()
-{
-    juce::uint8 red = 109;
-    juce::uint8 green = 0;
-    juce::uint8 blue = 181;
-    auto transparent = juce::Colour(red, green, blue, 0.0f);
-    
-    gainSlider->setColour(juce::Slider::backgroundColourId, juce::Colour(red, green, blue, 0.4f));
-    gainSlider->setColour(juce::Slider::thumbColourId, juce::Colour(red, green, blue));
-    gainSlider->setColour(juce::Slider::trackColourId, transparent);
 }
 
 void ReverbAudioProcessorEditor::AddGainSliderLabel()
 {
     juce::uint8 white = 230;
     addAndMakeVisible(gainSliderLabel.get());
-    gainSliderLabel->setFont(juce::Font ("Noteworthy", 25.0f, juce::Font::italic));
     gainSliderLabel->setText ("Gain", juce::dontSendNotification);
     gainSliderLabel->setJustificationType(juce::Justification::Flags::centredBottom);
     gainSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));

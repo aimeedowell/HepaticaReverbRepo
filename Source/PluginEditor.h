@@ -34,7 +34,6 @@ private:
     void AddGainSlider();
     void AddGainSliderLabel();
     void SetGainSliderBounds(int width, int height);
-    void SetGainSliderColour();
     
     void AddAudioVisualiser();
 

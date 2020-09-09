@@ -18,6 +18,11 @@ public:
     CustomLookAndFeel();
     ~CustomLookAndFeel();
     
+    juce::Font getLabelFont(juce::Label&) override;
+    
+    void drawLinearSlider(juce::Graphics&, int x, int y, int width, int height,
+                           float sliderPos, float minSliderPos, float maxSliderPos,
+                           const juce::Slider::SliderStyle, juce::Slider&) override;
 };
 #endif /* CustomLookAndFeel_h */
 
