@@ -8,11 +8,14 @@
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
 , audioProcessor (p)
+, reverbLookAndFeel(CustomLookAndFeel())
 , gainSlider(std::make_unique<juce::Slider>())
 , gainSliderLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 {
+    setLookAndFeel(&reverbLookAndFeel);
+    
     setSize (830, 350);
     
     AddGainSlider();
@@ -30,6 +33,7 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     gainSliderLabel.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
+    setLookAndFeel(nullptr);
 }
 
 void ReverbAudioProcessorEditor::paint(juce::Graphics &g)

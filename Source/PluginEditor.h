@@ -5,6 +5,8 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+#include "CustomLookAndFeel.h"
+
 class AudioVisualiserMeter;
 
 class ReverbAudioProcessorEditor
@@ -38,6 +40,8 @@ private:
     void AddAudioVisualiser();
 
     ReverbAudioProcessor& audioProcessor;
+    CustomLookAndFeel reverbLookAndFeel;
+    
     std::unique_ptr<juce::Slider> gainSlider;
     std::unique_ptr<juce::Label> gainSliderLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainSliderAttachment;
