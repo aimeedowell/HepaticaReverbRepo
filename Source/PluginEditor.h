@@ -37,6 +37,15 @@ private:
     void AddGainSliderLabel();
     void SetGainSliderBounds(int width, int height);
     
+    void AddReverbSizeSlider();
+    void SetReverbSizeSliderBounds(int width, int height);
+    
+    void AddPreDelaySlider();
+    void SetPreDelaySliderBounds(int width, int height);
+    
+    void AddEarlyReflectionsSlider();
+    void SetEarlyReflectionsSliderBounds(int width, int height);
+    
     void AddAudioVisualiser();
 
     ReverbAudioProcessor& audioProcessor;
@@ -45,6 +54,15 @@ private:
     std::unique_ptr<juce::Slider> gainSlider;
     std::unique_ptr<juce::Label> gainSliderLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainSliderAttachment;
+    
+    std::unique_ptr<juce::Slider> reverbSizeSlider;
+    std::unique_ptr<juce::Label> reverbSizeSliderLabel;
+    
+    std::unique_ptr<juce::Slider> preDelaySlider;
+    std::unique_ptr<juce::Label> preDelaySliderLabel;
+    
+    std::unique_ptr<juce::Slider> earlyReflectionsSlider;
+    std::unique_ptr<juce::Label> earlyReflectionsSliderLabel;
     
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;
