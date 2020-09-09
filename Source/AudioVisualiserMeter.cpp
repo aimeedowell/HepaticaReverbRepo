@@ -13,7 +13,7 @@
 
 AudioVisualiserMeter::AudioVisualiserMeter(ReverbAudioProcessorEditor &editor)
 : editor(editor)
-, meterImage(juce::ImageCache::getFromMemory(BinaryData::VisualAudioMeter_PNG, BinaryData::CommonPluginBackground_PNGSize))
+, meterImage(juce::ImageCache::getFromMemory(BinaryData::VisualAudioMeter_PNG, BinaryData::VisualAudioMeter_PNGSize))
 , meterWidth(80.f)
 , maxMeterHeight(300.f)
 , destX(0)
