@@ -118,6 +118,9 @@ void ReverbAudioProcessorEditor::AddReverbSizeSlider()
     reverbSizeSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
     reverbSizeSlider->addListener(this);
     reverbSizeSlider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    reverbSizeSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                   , "reverbSizeID"
+                                                                                                   , *reverbSizeSlider.get());
 }
 
 void ReverbAudioProcessorEditor::AddPreDelaySlider()
@@ -129,6 +132,9 @@ void ReverbAudioProcessorEditor::AddPreDelaySlider()
     preDelaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
     preDelaySlider->addListener(this);
     preDelaySlider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    preDelaySliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                   , "preDelayID"
+                                                                                                   , *preDelaySlider.get());
 }
 
 void ReverbAudioProcessorEditor::AddEarlyReflectionsSlider()
@@ -140,6 +146,9 @@ void ReverbAudioProcessorEditor::AddEarlyReflectionsSlider()
     earlyReflectionsSliderLabel->setColour(juce::Label::textColourId, juce::Colour(white, white, white, 0.6f));
     earlyReflectionsSlider->addListener(this);
     earlyReflectionsSlider->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    earlyReflectionsSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                   , "earlyReflectionsID"
+                                                                                                   , *earlyReflectionsSlider.get());
 }
 
 void ReverbAudioProcessorEditor::SetReverbSizeSliderBounds(int width, int height)

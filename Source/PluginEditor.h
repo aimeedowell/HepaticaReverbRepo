@@ -57,12 +57,15 @@ private:
     
     std::unique_ptr<juce::Slider> reverbSizeSlider;
     std::unique_ptr<juce::Label> reverbSizeSliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> reverbSizeSliderAttachment;
     
     std::unique_ptr<juce::Slider> preDelaySlider;
     std::unique_ptr<juce::Label> preDelaySliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> preDelaySliderAttachment;
     
     std::unique_ptr<juce::Slider> earlyReflectionsSlider;
     std::unique_ptr<juce::Label> earlyReflectionsSliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> earlyReflectionsSliderAttachment;
     
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;
