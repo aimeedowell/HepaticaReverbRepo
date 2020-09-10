@@ -134,6 +134,9 @@ void ReverbAudioProcessorEditor::AddPanSlider()
     panSlider->setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
     panSlider->setDoubleClickReturnValue(true, 0.0);
     panSlider->addListener(this);
+    panSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                , "panningID"
+                                                                                                , *panSlider.get());
 }
 
 void ReverbAudioProcessorEditor::AddDecaySlider()

@@ -66,6 +66,7 @@ private:
     std::unique_ptr<juce::Slider> panSlider;
     std::unique_ptr<juce::Label> leftPanSliderLabel;
     std::unique_ptr<juce::Label> rightPanSliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> panSliderAttachment;
     
     std::unique_ptr<juce::Slider> decaySlider;
     std::unique_ptr<juce::Label> decaySliderLabel;
