@@ -11,6 +11,9 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , reverbLookAndFeel(CustomLookAndFeel())
 , gainSlider(std::make_unique<juce::Slider>())
 , gainSliderLabel(std::make_unique<juce::Label>())
+, panSlider(std::make_unique<juce::Slider>())
+, leftPanSliderLabel(std::make_unique<juce::Label>())
+, rightPanSliderLabel(std::make_unique<juce::Label>())
 , decaySlider(std::make_unique<juce::Slider>())
 , decaySliderLabel(std::make_unique<juce::Label>())
 , widthSlider(std::make_unique<juce::Slider>())
@@ -34,6 +37,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     AddReverbSizeSlider();
     AddPreDelaySlider();
     AddEarlyReflectionsSlider();
+    AddPanSlider();
     AddAudioVisualiser();
     
     startTimer(10);
@@ -45,6 +49,10 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     gainSliderAttachment.reset(); //Delete parameter attachments before component is deleted else the attachment has no idea what it's dettaching from!!!
     gainSlider.reset();
     gainSliderLabel.reset();
+    panSliderAttachment.reset();
+    panSlider.reset();
+    leftPanSliderLabel.reset();
+    rightPanSliderLabel.reset();
     decaySliderAttachment.reset();
     decaySlider.reset();
     decaySliderLabel.reset();
@@ -76,6 +84,7 @@ void ReverbAudioProcessorEditor::resized()
     auto height = getHeight();
     
     SetGainSliderBounds(width, height);
+    SetPanSliderBounds(width, height);
     SetDecaySliderBounds(width, height);
     SetWidthSliderBounds(width, height);
     SetReverbSizeSliderBounds(width, height);
@@ -113,6 +122,23 @@ void ReverbAudioProcessorEditor::AddGainSlider()
     
 }
 
+void ReverbAudioProcessorEditor::AddPanSlider()
+{
+    addAndMakeVisible(panSlider.get());
+    addAndMakeVisible(leftPanSliderLabel.get());
+    addAndMakeVisible(rightPanSliderLabel.get());
+    leftPanSliderLabel->setText("Left", juce::NotificationType::dontSendNotification);
+    leftPanSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    rightPanSliderLabel->setText("Right", juce::NotificationType::dontSendNotification);
+    rightPanSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    panSlider->setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    panSlider->setDoubleClickReturnValue(true, 0.0);
+    panSlider->addListener(this);
+    panSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                , "panningID"
+                                                                                                , *panSlider.get());
+}
+
 void ReverbAudioProcessorEditor::AddDecaySlider()
 {
     addAndMakeVisible(decaySlider.get());
@@ -147,6 +173,13 @@ void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
 {
     gainSlider->setBounds(680, 20 , 60, 300);
     gainSliderLabel->setBounds(690, 310, 40, 30);
+}
+
+void ReverbAudioProcessorEditor::SetPanSliderBounds(int width, int height)
+{
+    panSlider->setBounds(275, 295, 280, 60);
+    leftPanSliderLabel->setBounds(240, 320, 40, 30);
+    rightPanSliderLabel->setBounds(545, 320, 40, 30);
 }
 
 void ReverbAudioProcessorEditor::SetDecaySliderBounds(int width, int height)

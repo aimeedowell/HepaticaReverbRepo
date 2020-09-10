@@ -36,6 +36,9 @@ private:
     void AddGainSlider();
     void SetGainSliderBounds(int width, int height);
     
+    void AddPanSlider();
+    void SetPanSliderBounds(int width, int height);
+    
     void AddDecaySlider();
     void SetDecaySliderBounds(int width, int height);
     
@@ -59,6 +62,11 @@ private:
     std::unique_ptr<juce::Slider> gainSlider;
     std::unique_ptr<juce::Label> gainSliderLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> gainSliderAttachment;
+    
+    std::unique_ptr<juce::Slider> panSlider;
+    std::unique_ptr<juce::Label> leftPanSliderLabel;
+    std::unique_ptr<juce::Label> rightPanSliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> panSliderAttachment;
     
     std::unique_ptr<juce::Slider> decaySlider;
     std::unique_ptr<juce::Label> decaySliderLabel;
