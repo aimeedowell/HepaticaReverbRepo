@@ -11,6 +11,7 @@ using namespace juce;
 
 CustomLookAndFeel::CustomLookAndFeel()
 : flowerImage(juce::ImageCache::getFromMemory(BinaryData::Hepatica_PNG, BinaryData::Hepatica_PNGSize))
+, dotSliderImage(juce::ImageCache::getFromMemory(BinaryData::HepaticaDot_PNG, BinaryData::HepaticaDot_PNGSize))
 {
     
 }
@@ -51,6 +52,12 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
 
         Point<float> endPoint (slider.isHorizontal() ? (float) (width + x) : startPoint.x,
                                slider.isHorizontal() ? startPoint.y : (float) y);
+        
+        if (slider.isHorizontal() && width > 200)
+        {
+            SetDottedSliderColours(slider);
+            trackWidth = trackWidth * 2.0f;
+        }
 
         Path backgroundTrack;
         backgroundTrack.startNewSubPath (startPoint);
@@ -61,20 +68,11 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
         Path valueTrack;
         Point<float> minPoint, maxPoint, thumbPoint;
 
-        if (isTwoVal || isThreeVal)
+        if (!isTwoVal || !isThreeVal)
         {
             minPoint = { slider.isHorizontal() ? minSliderPos : (float) width * 0.5f,
                          slider.isHorizontal() ? (float) height * 0.5f : minSliderPos };
 
-            if (isThreeVal)
-                thumbPoint = { slider.isHorizontal() ? sliderPos : (float) width * 0.5f,
-                               slider.isHorizontal() ? (float) height * 0.5f : sliderPos };
-
-            maxPoint = { slider.isHorizontal() ? maxSliderPos : (float) width * 0.5f,
-                         slider.isHorizontal() ? (float) height * 0.5f : maxSliderPos };
-        }
-        else
-        {
             auto kx = slider.isHorizontal() ? sliderPos : ((float) x + (float) width * 0.5f);
             auto ky = slider.isHorizontal() ? ((float) y + (float) height * 0.5f) : sliderPos;
 
@@ -83,6 +81,13 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
         }
 
         auto thumbWidth = trackWidth * 3.5f;
+        
+        if (slider.isHorizontal() && width > 200)
+        {
+            DrawDottedSlider(g, x, y, trackWidth, width, height, sliderPos);
+            
+            thumbWidth = trackWidth;
+        }
 
         valueTrack.startNewSubPath (minPoint);
         valueTrack.lineTo (isThreeVal ? thumbPoint : maxPoint);
@@ -94,32 +99,9 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
             g.setColour (slider.findColour (Slider::thumbColourId));
             g.fillEllipse (Rectangle<float> (static_cast<float> (thumbWidth), static_cast<float> (thumbWidth)).withCentre (isThreeVal ? thumbPoint : maxPoint));
         }
+    }
+}
 
-        if (isTwoVal || isThreeVal)
-        {
-            auto sr = jmin (trackWidth, (slider.isHorizontal() ? (float) height : (float) width) * 0.4f);
-            auto pointerColour = slider.findColour (Slider::thumbColourId);
-
-            if (slider.isHorizontal())
-            {
-                drawPointer (g, minSliderPos - sr,
-                             jmax (0.0f, (float) y + (float) height * 0.5f - trackWidth * 2.0f),
-                             trackWidth * 2.0f, pointerColour, 2);
-
-                drawPointer (g, maxSliderPos - trackWidth,
-                             jmin ((float) (y + height) - trackWidth * 2.0f, (float) y + (float) height * 0.5f),
-                             trackWidth * 2.0f, pointerColour, 4);
-            }
-            else
-            {
-                drawPointer (g, jmax (0.0f, (float) x + (float) width * 0.5f - trackWidth * 2.0f),
-                             minSliderPos - trackWidth,
-                             trackWidth * 2.0f, pointerColour, 1);
-
-                drawPointer (g, jmin ((float) (x + width) - trackWidth * 2.0f, (float) x + (float) width * 0.5f), maxSliderPos - sr,
-                             trackWidth * 2.0f, pointerColour, 3);
-            }
-        }
 void CustomLookAndFeel::SetDefaultSliderColour(juce::Slider &slider)
 {
     juce::uint8 red = 109;
@@ -131,7 +113,46 @@ void CustomLookAndFeel::SetDefaultSliderColour(juce::Slider &slider)
     slider.setColour(Slider::trackColourId, transparent);
     slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
 }
+
+void CustomLookAndFeel::DrawDottedSlider(juce::Graphics &g, int x, int y, int trackWidth, int width, int height, float sliderPos)
+{
+    auto startPos = (float) x + (float) width * 0.5f;
+    auto verticalFlip = AffineTransform::rotation(3.1415926536f, startPos, float(y + 19));
+    float distance = 0;
+    float sliderRatio = 0;
+    g.setOpacity(1.0f);
+    
+    if (sliderPos >= 140)
+    {
+        distance = sliderPos - startPos;
+        sliderRatio = distance/startPos;
+        
+        g.drawImage(dotSliderImage, startPos, 22, startPos * sliderRatio, trackWidth, 0, 0, dotSliderImage.getWidth() * sliderRatio, dotSliderImage.getHeight());
     }
+    else if(sliderPos <= 140)
+    {
+        distance = startPos - sliderPos;
+        sliderRatio = distance/startPos;
+
+        g.addTransform(verticalFlip);
+        
+        g.drawImage(dotSliderImage, startPos, 0, startPos * sliderRatio, trackWidth, 0, 0, dotSliderImage.getWidth() * sliderRatio, dotSliderImage.getHeight());
+        
+        g.addTransform(verticalFlip);
+
+    }
+}
+
+void CustomLookAndFeel::SetDottedSliderColours(juce::Slider &slider)
+{
+    juce::uint8 red = 197;
+    juce::uint8 green = 4;
+    juce::uint8 blue = 222;
+    auto transparent = juce::Colour(red, green, blue, 0.0f);
+    slider.setColour(Slider::backgroundColourId, juce::Colour(red, green, blue, 0.6f));
+    slider.setColour(Slider::thumbColourId, juce::Colour(245, 245, 245));
+    slider.setColour(Slider::trackColourId, transparent);
+    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
 }
 
 void CustomLookAndFeel::drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,

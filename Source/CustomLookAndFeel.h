@@ -30,8 +30,13 @@ public:
     
     void SetDefaultSliderColour(juce::Slider &slider);
     
+    void DrawDottedSlider(juce::Graphics &g, int x, int y, int trackWidth, int width, int height, float sliderPos);
+    
+    void SetDottedSliderColours(juce::Slider &slider);
+    
 private:
-        juce::Image flowerImage;
+    juce::Image flowerImage;
+    juce::Image dotSliderImage;
 };
 #endif /* CustomLookAndFeel_h */
 
