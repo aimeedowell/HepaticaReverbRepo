@@ -6,6 +6,7 @@
   <MAINGROUP id="pB7c0w" name="Hepatica Reverb">
     <GROUP id="{592ABEC2-B00D-EAD4-9EBA-C84885F681BC}" name="Resources">
       <FILE id="KQlk4S" name="Hepatica.PNG" compile="0" resource="1" file="Resources/Hepatica.PNG"/>
+      <FILE id="K8fnOO" name="HepaticaDot.PNG" compile="0" resource="1" file="Resources/HepaticaDot.PNG"/>
       <FILE id="X1UseP" name="VisualAudioMeter.PNG" compile="0" resource="1"
             file="Resources/VisualAudioMeter.PNG"/>
       <FILE id="kdaxxQ" name="CommonPluginBackground.PNG" compile="0" resource="1"
@@ -19,6 +20,14 @@
       <FILE id="igXj5m" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="RICBCS" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="nffRAK" name="AudioVisualiserMeter.cpp" compile="1" resource="0"
+            file="Source/AudioVisualiserMeter.cpp"/>
+      <FILE id="rbFfWs" name="AudioVisualiserMeter.h" compile="0" resource="0"
+            file="Source/AudioVisualiserMeter.h"/>
+      <FILE id="jRMq3J" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/CustomLookAndFeel.cpp"/>
+      <FILE id="KijdL3" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
