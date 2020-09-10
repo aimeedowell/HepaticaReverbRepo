@@ -31,14 +31,7 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
                                          float maxSliderPos,
                                          const Slider::SliderStyle style, Slider& slider)
 {
-    juce::uint8 red = 109;
-    juce::uint8 green = 0;
-    juce::uint8 blue = 181;
-    auto transparent = juce::Colour(red, green, blue, 0.0f);
-    slider.setColour(Slider::backgroundColourId, juce::Colour(red, green, blue, 0.6f));
-    slider.setColour(Slider::thumbColourId, juce::Colour(174, 119, 212));
-    slider.setColour(Slider::trackColourId, transparent);
-    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    SetDefaultSliderColour(slider);
     
     if (slider.isBar())
     {
@@ -127,6 +120,17 @@ void CustomLookAndFeel::drawLinearSlider(Graphics& g, int x, int y, int width, i
                              trackWidth * 2.0f, pointerColour, 3);
             }
         }
+void CustomLookAndFeel::SetDefaultSliderColour(juce::Slider &slider)
+{
+    juce::uint8 red = 109;
+    juce::uint8 green = 0;
+    juce::uint8 blue = 181;
+    auto transparent = juce::Colour(red, green, blue, 0.0f);
+    slider.setColour(Slider::backgroundColourId, juce::Colour(red, green, blue, 0.6f));
+    slider.setColour(Slider::thumbColourId, juce::Colour(174, 119, 212));
+    slider.setColour(Slider::trackColourId, transparent);
+    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+}
     }
 }
 

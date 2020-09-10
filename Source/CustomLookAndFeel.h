@@ -28,6 +28,8 @@ public:
                              float sliderPosProportional, float rotaryStartAngle, float rotaryEndAngle,
                              juce::Slider&) override;
     
+    void SetDefaultSliderColour(juce::Slider &slider);
+    
 private:
         juce::Image flowerImage;
 };
