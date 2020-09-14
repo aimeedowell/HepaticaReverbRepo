@@ -4,6 +4,7 @@
 #include "PluginEditor.h"
 
 #include "AudioVisualiserMeter.h"
+#include "Equalisation.h"
 
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
@@ -26,6 +27,8 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , earlyReflectionsSliderLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
+, eqGraph(std::make_unique<Equalisation>(audioProcessor))
+, eqGraphLabel(std::make_unique<juce::Label>())
 {
     setLookAndFeel(&reverbLookAndFeel);
     
@@ -39,6 +42,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     AddEarlyReflectionsSlider();
     AddPanSlider();
     AddAudioVisualiser();
+    AddEqualisationGraph();
     
     startTimer(10);
 }
@@ -70,6 +74,8 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     earlyReflectionsSliderLabel.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
+    eqGraph.reset();
+    eqGraphLabel.reset();
     setLookAndFeel(nullptr);
 }
 
@@ -270,4 +276,16 @@ void ReverbAudioProcessorEditor::SetAudioVisualiserBounds(AudioVisualiserMeter *
         meterPosition = 90;
     
     meter->setBounds(getWidth() - meterPosition, 30 + yPosition, meterWidth, meterHeight);
+}
+
+void ReverbAudioProcessorEditor::AddEqualisationGraph()
+{
+    addAndMakeVisible(eqGraphLabel.get());
+    addAndMakeVisible(eqGraph.get());
+    
+    eqGraphLabel->setText("Equalisation", juce::NotificationType::dontSendNotification);
+    eqGraphLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    
+    eqGraphLabel.get()->setBounds(140, 37, 120, 20);
+    eqGraph.get()->setBounds(95, 60, eqGraph.get()->GetEQWidth(), eqGraph.get()->GetEQHeight());
 }

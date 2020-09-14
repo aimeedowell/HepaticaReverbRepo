@@ -8,6 +8,7 @@
 #include "CustomLookAndFeel.h"
 
 class AudioVisualiserMeter;
+class Equalisation;
 
 class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
@@ -56,6 +57,8 @@ private:
     
     void AddAudioVisualiser();
 
+    void AddEqualisationGraph();
+
     ReverbAudioProcessor& audioProcessor;
     CustomLookAndFeel reverbLookAndFeel;
     
@@ -90,6 +93,9 @@ private:
     
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;
+    
+    std::unique_ptr<Equalisation> eqGraph;
+    std::unique_ptr<juce::Label> eqGraphLabel;
     
     juce::uint8 labelColour = 245;
     
