@@ -33,9 +33,14 @@ private:
     void AddSliderImage();
     void SetSliderImageBounds(int width, int height);
     
+    void AddRotarySlider();
+    void SetRotarySliderBounds(int width, int height);
+    
     juce::Image sliderImage;
     std::unique_ptr<juce::ImageComponent> sliderComponent;
     
+    std::unique_ptr<juce::Slider> modSlider;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> modSliderAttachment;
 };
 
 #endif /* ModulationDial_h */
