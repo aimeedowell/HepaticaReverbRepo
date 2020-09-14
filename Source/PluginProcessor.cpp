@@ -196,6 +196,14 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
                                                                      "Early Reflections",   // parameter name
                                                                      juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
                                                                      5.0f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("modFreqID", // parameterID
+                                                                     "Mod Freq",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
+                                                                     5.0f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("modDepthID", // parameterID
+                                                                     "Mod Depth",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
+                                                                     5.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("noEQID", // parameterID
                                                                     "EQ off",   // parameter name
                                                                     true));  // default value)
