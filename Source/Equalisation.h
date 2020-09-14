@@ -28,7 +28,34 @@ private:
     //juce::ButtonListener
     void buttonClicked(juce::Button*) override;
     void buttonStateChanged(juce::Button*) override;
+    
+    void AddEqualisationButtons();
+    
+    void SetEqualisationButtonBounds(int width, int height);
     ReverbAudioProcessor &audioProcessor;
+    
+    std::unique_ptr<juce::ImageButton> noEQButton;
+    std::unique_ptr<juce::ImageButton> lowPassButton;
+    std::unique_ptr<juce::ImageButton> highPassButton;
+    std::unique_ptr<juce::ImageButton> lowShelfButton;
+    std::unique_ptr<juce::ImageButton> highShelfButton;
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> noEQButtonAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> lowPassButtonAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> highPassButtonAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> lowShelfButtonAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> highShelfButtonAttachment;
+    
+    juce::Image noEQ;
+    juce::Image noEQDown;
+    juce::Image lowPass;
+    juce::Image lowPassDown;
+    juce::Image highPass;
+    juce::Image highPassDown;
+    juce::Image lowShelf;
+    juce::Image lowShelfDown;
+    juce::Image highShelf;
+    juce::Image highShelfDown;
 };
 
 #endif /* Equalisation_h */
