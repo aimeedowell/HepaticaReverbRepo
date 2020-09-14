@@ -7,6 +7,16 @@
     <GROUP id="{592ABEC2-B00D-EAD4-9EBA-C84885F681BC}" name="Resources">
       <FILE id="KQlk4S" name="Hepatica.PNG" compile="0" resource="1" file="Resources/Hepatica.PNG"/>
       <FILE id="K8fnOO" name="HepaticaDot.PNG" compile="0" resource="1" file="Resources/HepaticaDot.PNG"/>
+      <FILE id="gAxsKc" name="HP.PNG" compile="0" resource="1" file="Resources/HP.PNG"/>
+      <FILE id="za5brF" name="HPDown.PNG" compile="0" resource="1" file="Resources/HPDown.PNG"/>
+      <FILE id="cBda1e" name="HS.PNG" compile="0" resource="1" file="Resources/HS.PNG"/>
+      <FILE id="lzhE8h" name="HSDown.PNG" compile="0" resource="1" file="Resources/HSDown.PNG"/>
+      <FILE id="zp7T5Y" name="LP.PNG" compile="0" resource="1" file="Resources/LP.PNG"/>
+      <FILE id="QNu6qR" name="LPDown.PNG" compile="0" resource="1" file="Resources/LPDown.PNG"/>
+      <FILE id="KbeKzH" name="LS.PNG" compile="0" resource="1" file="Resources/LS.PNG"/>
+      <FILE id="H3lLJm" name="LSDown.PNG" compile="0" resource="1" file="Resources/LSDown.PNG"/>
+      <FILE id="KHdsbf" name="X.PNG" compile="0" resource="1" file="Resources/X.PNG"/>
+      <FILE id="ZQMGSg" name="XDown.PNG" compile="0" resource="1" file="Resources/XDown.PNG"/>
       <FILE id="X1UseP" name="VisualAudioMeter.PNG" compile="0" resource="1"
             file="Resources/VisualAudioMeter.PNG"/>
       <FILE id="kdaxxQ" name="CommonPluginBackground.PNG" compile="0" resource="1"
@@ -28,6 +38,9 @@
             file="Source/CustomLookAndFeel.cpp"/>
       <FILE id="KijdL3" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
+      <FILE id="rX4HZZ" name="Equalisation.cpp" compile="1" resource="0"
+            file="Source/Equalisation.cpp"/>
+      <FILE id="IRXMRk" name="Equalisation.h" compile="0" resource="0" file="Source/Equalisation.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

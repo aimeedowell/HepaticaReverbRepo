@@ -196,6 +196,21 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
                                                                      "Early Reflections",   // parameter name
                                                                      juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
                                                                      5.0f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("noEQID", // parameterID
+                                                                    "EQ off",   // parameter name
+                                                                    true));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("lowPassID", // parameterID
+                                                                    "Low Pass",   // parameter name
+                                                                    false));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("highPassID", // parameterID
+                                                                    "High Pass",   // parameter name
+                                                                    false));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("lowShelfID", // parameterID
+                                                                    "Low Shelf",   // parameter name
+                                                                    false));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("highShelfID", // parameterID
+                                                                    "High Shelf",   // parameter name
+                                                                    false));  // default value)
     
     return { parameters.begin(), parameters.end() };
 }
