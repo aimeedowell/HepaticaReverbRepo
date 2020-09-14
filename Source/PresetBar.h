@@ -26,6 +26,23 @@ public:
     //juce::ButtonListener
     void buttonClicked(juce::Button*) override {};
     void buttonStateChanged(juce::Button*) override {};
+    
+    const int GetPresetBarWidth() { return getWidth(); };
+    const int GetPresetBarHeight() { return getHeight(); };
+    
+    juce::String SetPresetText(juce::String preset);
+    juce::String GetPresetText();
+    
+private:
+    
+    void AddPresetLabel();
+    void SetLabelBounds();
+    
+    std::unique_ptr<juce::Label> presetLabel;
+    juce::String textForLabel;
+    juce::uint8 colour = 245;
+    int barWidth = 200;
+    int presetButtonWidth = 30;
 };
 
 #endif /* PresetBar_h */
