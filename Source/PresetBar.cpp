@@ -23,6 +23,12 @@ PresetBar::~PresetBar()
 {
     presetLabel.reset();
 }
+
+void PresetBar::paint(juce::Graphics &g)
+{
+    DrawPresetBarLines(g);
+}
+
 void PresetBar::resized()
 {
     SetLabelBounds();
@@ -51,3 +57,11 @@ void PresetBar::SetLabelBounds()
     presetLabel.get()->setBounds(0, 0, getWidth(), getHeight());
 }
 
+void PresetBar::DrawPresetBarLines(juce::Graphics &g)
+{
+    auto lineThickness = 2.5f;
+    g.setColour(juce::Colour(colour, colour, colour));
+    
+    g.drawLine(5 + presetButtonWidth, 0, barWidth + 5 + presetButtonWidth, 0, lineThickness);
+    g.drawLine(5 + presetButtonWidth, getHeight(), barWidth + 5 + presetButtonWidth, getHeight(), lineThickness);
+}

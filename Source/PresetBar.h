@@ -35,6 +35,8 @@ public:
     
 private:
     
+    void DrawPresetBarLines(juce::Graphics &g);
+    
     void AddPresetLabel();
     void SetLabelBounds();
     
