@@ -21,10 +21,21 @@ public:
     
     //juce::Slider
     void sliderValueChanged(juce::Slider* slider) override {};
+    
+    const int GetModDialHeight() { return getHeight(); };
+    const int GetModDialWidth() { return getWidth(); };
+    
 private:
     //juce::Component
     void paint(juce::Graphics&) override;
     void resized() override;
+    
+    void AddSliderImage();
+    void SetSliderImageBounds(int width, int height);
+    
+    juce::Image sliderImage;
+    std::unique_ptr<juce::ImageComponent> sliderComponent;
+    
 };
 
 #endif /* ModulationDial_h */
