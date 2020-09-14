@@ -126,6 +126,36 @@ void Equalisation::DrawHighPass(juce::Graphics &g)
     
     DrawEQRect(g);
 }
+
+void Equalisation::DrawLowShelf(juce::Graphics &g)
+{
+    FillEQRect(g);
+    auto cutoff = rectWidth * 0.25;
+    auto shelfHeight = 5;
+    
+    g.setColour(juce::Colour(177, 9, 219));
+    g.drawLine(0, shelfHeight, cutoff - 10, shelfHeight, lineThickness * 1.5f);
+    g.drawLine(cutoff - 10, shelfHeight, cutoff, noEQLine, lineThickness * 1.5f);
+    g.drawLine(cutoff, noEQLine, rectWidth, noEQLine, lineThickness * 1.5f);
+    
+    DrawEQRect(g);
+}
+
+void Equalisation::DrawHighShelf(juce::Graphics &g)
+{
+    FillEQRect(g);
+    auto cutoff = rectWidth * 0.75;
+    auto shelfHeight = 5;
+    
+    g.setColour(juce::Colour(177, 9, 219));
+    g.drawLine(rectWidth, shelfHeight, cutoff + 10, shelfHeight, lineThickness * 1.5f);
+    g.drawLine(cutoff + 10, shelfHeight, cutoff, noEQLine, lineThickness * 1.5f);
+    g.drawLine(cutoff, noEQLine, 0, noEQLine, lineThickness * 1.5f);
+    
+    DrawEQRect(g);
+}
+
+
 void Equalisation::DrawNoEqualisation(juce::Graphics &g)
 {
     FillEQRect(g);

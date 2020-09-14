@@ -41,6 +41,10 @@ private:
     
     void DrawHighPass(juce::Graphics &g);
     
+    void DrawLowShelf(juce::Graphics &g);
+    
+    void DrawHighShelf(juce::Graphics &g);
+    
     void DrawNoEqualisation(juce::Graphics &g);
     
     void DrawEQRect(juce::Graphics &g);
