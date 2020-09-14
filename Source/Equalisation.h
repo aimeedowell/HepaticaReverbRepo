@@ -37,6 +37,10 @@ private:
     
     void SetEqualisationButtonBounds(int width, int height);
     
+    void DrawLowPass(juce::Graphics &g);
+    
+    void DrawHighPass(juce::Graphics &g);
+    
     void DrawNoEqualisation(juce::Graphics &g);
     
     void DrawEQRect(juce::Graphics &g);

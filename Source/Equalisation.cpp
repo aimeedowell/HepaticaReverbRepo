@@ -100,6 +100,32 @@ void Equalisation::buttonStateChanged(juce::Button *button)
 {
 
 }
+
+void Equalisation::DrawLowPass(juce::Graphics &g)
+{
+    auto cutoff = rectWidth * 0.75;
+    
+    FillEQRect(g);
+    
+    g.setColour(juce::Colour(177, 9, 219));
+    g.drawLine(0, noEQLine, cutoff, noEQLine, lineThickness * 1.5f);
+    g.drawLine(cutoff - 1, noEQLine, rectWidth, rectHeight, lineThickness * 1.5f);
+    
+    DrawEQRect(g);
+}
+
+void Equalisation::DrawHighPass(juce::Graphics &g)
+{
+    auto cutoff = rectWidth * 0.25;
+    
+    FillEQRect(g);
+    
+    g.setColour(juce::Colour(177, 9, 219));
+    g.drawLine(cutoff, noEQLine, rectWidth, noEQLine, lineThickness * 1.5f);
+    g.drawLine(0, rectHeight, cutoff + 1, noEQLine, lineThickness * 1.5f);
+    
+    DrawEQRect(g);
+}
 void Equalisation::DrawNoEqualisation(juce::Graphics &g)
 {
     FillEQRect(g);
