@@ -158,11 +158,10 @@ void CustomLookAndFeel::SetDottedSliderColours(juce::Slider &slider)
 void CustomLookAndFeel::drawRotarySlider (Graphics& g, int x, int y, int width, int height, float sliderPos,
                                        const float rotaryStartAngle, const float rotaryEndAngle, Slider& slider)
 {
-    uint8 white = 245;
-    slider.setColour(Slider::rotarySliderFillColourId, Colour(111, 11, 224));
-    slider.setColour(Slider::rotarySliderOutlineColourId, Colour(white, white, white, 0.7f));
-    slider.setColour(Slider::thumbColourId, Colour(uint8(111), uint8(11), uint8(224), 0.0f));
-    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    if (width > 75)
+        SetDefaultRotarySliderColour(slider);
+    else
+        SetModulationSliderColour(slider);
     
     auto outline = slider.findColour (Slider::rotarySliderOutlineColourId);
     auto fill    = slider.findColour (Slider::rotarySliderFillColourId);
@@ -198,21 +197,23 @@ void CustomLookAndFeel::drawRotarySlider (Graphics& g, int x, int y, int width, 
                                 rotaryStartAngle,
                                 toAngle,
                                 true);
+        float trackWidth = lineW;
+        
+        if (width > 75)
+            trackWidth = lineW * 4.0f;
+        else
+            trackWidth = lineW * 2.0f;
         
         g.setColour (fill);
-        g.strokePath (valueArc, PathStrokeType (lineW * 4.0f, PathStrokeType::curved, PathStrokeType::rounded));
+        g.strokePath (valueArc, PathStrokeType (trackWidth, PathStrokeType::curved, PathStrokeType::rounded));
         
-        g.setColour (outline);
-        g.strokePath (backgroundArc, PathStrokeType (lineW, PathStrokeType::curved, PathStrokeType::rounded));
-        
-        auto transform = AffineTransform::rotation(toAngle, centreX, centreY);
-        
-        float opacity;
-        opacity = slider.isMouseOverOrDragging() ? 1.0f : 0.7f;
-        g.setOpacity(opacity);
-        
-        g.addTransform(transform);
-        g.drawImageWithin(flowerImage, width/9.5, height/9.5, width/1.25, height/1.25, RectanglePlacement::stretchToFit);
+        if (width > 75)
+        {
+            g.setColour (outline);
+            g.strokePath (backgroundArc, PathStrokeType (lineW, PathStrokeType::curved, PathStrokeType::rounded));
+            
+            DrawFlowerSlider(g, slider, toAngle, centreX, centreY, width, height);
+        }
     
     }
     
@@ -224,3 +225,34 @@ void CustomLookAndFeel::drawRotarySlider (Graphics& g, int x, int y, int width, 
     g.setColour (slider.findColour (Slider::thumbColourId));
     g.fillEllipse (Rectangle<float> (thumbWidth, thumbWidth).withCentre (thumbPoint));
 }
+
+void CustomLookAndFeel::SetDefaultRotarySliderColour(juce::Slider &slider)
+{
+    uint8 white = 245;
+    slider.setColour(Slider::rotarySliderFillColourId, Colour(111, 11, 224));
+    slider.setColour(Slider::rotarySliderOutlineColourId, Colour(white, white, white, 0.7f));
+    slider.setColour(Slider::thumbColourId, Colour(uint8(111), uint8(11), uint8(224), 0.0f));
+    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+}
+
+void CustomLookAndFeel::SetModulationSliderColour(juce::Slider &slider)
+{
+    uint8 white = 245;
+    slider.setColour(Slider::rotarySliderFillColourId, Colour(177, 9, 219));
+    slider.setColour(Slider::rotarySliderOutlineColourId, Colour(white, white, white, 0.0f));
+    slider.setColour(Slider::thumbColourId, Colour(white, white, white, 0.0f));
+    slider.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+}
+
+void CustomLookAndFeel::DrawFlowerSlider(juce::Graphics &g, juce::Slider &slider, float toAngle, float centreX, float centreY, int width, int height)
+{
+    auto transform = AffineTransform::rotation(toAngle, centreX, centreY);
+    
+    float opacity;
+    opacity = slider.isMouseOverOrDragging() ? 1.0f : 0.7f;
+    g.setOpacity(opacity);
+    
+    g.addTransform(transform);
+    g.drawImageWithin(flowerImage, width/9.5, height/9.5, width/1.25, height/1.25, RectanglePlacement::stretchToFit);
+}
+
