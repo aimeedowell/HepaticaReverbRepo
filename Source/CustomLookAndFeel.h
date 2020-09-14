@@ -34,6 +34,12 @@ public:
     
     void SetDottedSliderColours(juce::Slider &slider);
     
+    void SetDefaultRotarySliderColour(juce::Slider &slider);
+    
+    void DrawFlowerSlider(juce::Graphics &g, juce::Slider &slider, float toAngle, float centreX, float centreY, int width, int height);
+    
+    void SetModulationSliderColour(juce::Slider &slider);
+    
 private:
     juce::Image flowerImage;
     juce::Image dotSliderImage;

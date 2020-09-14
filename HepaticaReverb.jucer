@@ -7,6 +7,8 @@
     <GROUP id="{592ABEC2-B00D-EAD4-9EBA-C84885F681BC}" name="Resources">
       <FILE id="KQlk4S" name="Hepatica.PNG" compile="0" resource="1" file="Resources/Hepatica.PNG"/>
       <FILE id="K8fnOO" name="HepaticaDot.PNG" compile="0" resource="1" file="Resources/HepaticaDot.PNG"/>
+      <FILE id="glofl7" name="ModulationSlider.PNG" compile="0" resource="1"
+            file="Resources/ModulationSlider.PNG"/>
       <FILE id="gAxsKc" name="HP.PNG" compile="0" resource="1" file="Resources/HP.PNG"/>
       <FILE id="za5brF" name="HPDown.PNG" compile="0" resource="1" file="Resources/HPDown.PNG"/>
       <FILE id="cBda1e" name="HS.PNG" compile="0" resource="1" file="Resources/HS.PNG"/>
@@ -41,6 +43,10 @@
       <FILE id="rX4HZZ" name="Equalisation.cpp" compile="1" resource="0"
             file="Source/Equalisation.cpp"/>
       <FILE id="IRXMRk" name="Equalisation.h" compile="0" resource="0" file="Source/Equalisation.h"/>
+      <FILE id="C9lrq0" name="ModulationDial.cpp" compile="1" resource="0"
+            file="Source/ModulationDial.cpp"/>
+      <FILE id="vBCkZB" name="ModulationDial.h" compile="0" resource="0"
+            file="Source/ModulationDial.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

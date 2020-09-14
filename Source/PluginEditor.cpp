@@ -5,6 +5,7 @@
 
 #include "AudioVisualiserMeter.h"
 #include "Equalisation.h"
+#include "ModulationDial.h"
 
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
@@ -25,6 +26,10 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , preDelaySliderLabel(std::make_unique<juce::Label>())
 , earlyReflectionsSlider(std::make_unique<juce::Slider>())
 , earlyReflectionsSliderLabel(std::make_unique<juce::Label>())
+, modFreq(std::make_unique<ModulationDial>())
+, modDepth(std::make_unique<ModulationDial>())
+, modFreqLabel(std::make_unique<juce::Label>())
+, modDepthLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , eqGraph(std::make_unique<Equalisation>(audioProcessor))
@@ -40,6 +45,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     AddReverbSizeSlider();
     AddPreDelaySlider();
     AddEarlyReflectionsSlider();
+    AddModulationSliders();
     AddPanSlider();
     AddAudioVisualiser();
     AddEqualisationGraph();
@@ -72,6 +78,10 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     earlyReflectionsSliderAttachment.reset();
     earlyReflectionsSlider.reset();
     earlyReflectionsSliderLabel.reset();
+    modFreqSliderAttachment.reset();
+    modFreq.reset();
+    modDepthSliderAttachment.reset();
+    modDepth.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
     eqGraph.reset();
@@ -96,6 +106,7 @@ void ReverbAudioProcessorEditor::resized()
     SetReverbSizeSliderBounds(width, height);
     SetPreDelaySliderBounds(width, height);
     SetEarlyReflectionsSliderBounds(width, height);
+    SetModulationSliderBounds(width, height);
 }
 
 void ReverbAudioProcessorEditor::timerCallback()
@@ -257,6 +268,34 @@ void ReverbAudioProcessorEditor::SetEarlyReflectionsSliderBounds(int width, int 
     earlyReflectionsSliderLabel->setBounds(150, 240, 150, 150);
 }
 
+void ReverbAudioProcessorEditor::AddModulationSliders()
+{
+    addAndMakeVisible(modFreq.get());
+    addAndMakeVisible(modDepth.get());
+    addAndMakeVisible(modFreqLabel.get());
+    addAndMakeVisible(modDepthLabel.get());
+    
+    modFreqLabel->setText("Mod Freq", juce::NotificationType::dontSendNotification);
+    modFreqLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    modDepthLabel->setText("Mod Depth", juce::NotificationType::dontSendNotification);
+    modDepthLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    
+    modFreqSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                   , "modFreqID"
+                                                                                                   , *modFreq.get());
+    modDepthSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                   , "modDepthID"
+                                                                                                   , *modDepth.get());
+}
+
+void ReverbAudioProcessorEditor::SetModulationSliderBounds(int width, int height)
+{
+    modDepth->setBounds(545, 95, modDepth->GetModDialWidth(), modDepth->GetModDialHeight());
+    modFreq->setBounds(610, 45, modFreq->GetModDialWidth(), modFreq->GetModDialHeight());
+    modDepthLabel->setBounds(620, 130, 70, 20);
+    modFreqLabel->setBounds(535, 65, 70, 20);
+}
+
 void ReverbAudioProcessorEditor::AddAudioVisualiser()
 {
     addAndMakeVisible(leftAudioMeter.get());
@@ -286,6 +325,6 @@ void ReverbAudioProcessorEditor::AddEqualisationGraph()
     eqGraphLabel->setText("Equalisation", juce::NotificationType::dontSendNotification);
     eqGraphLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     
-    eqGraphLabel.get()->setBounds(140, 37, 120, 20);
+    eqGraphLabel.get()->setBounds(140, 37, 130, 20);
     eqGraph.get()->setBounds(95, 60, eqGraph.get()->GetEQWidth(), eqGraph.get()->GetEQHeight());
 }

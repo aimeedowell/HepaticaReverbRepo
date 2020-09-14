@@ -9,6 +9,7 @@
 
 class AudioVisualiserMeter;
 class Equalisation;
+class ModulationDial;
 
 class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
@@ -55,6 +56,9 @@ private:
     void AddEarlyReflectionsSlider();
     void SetEarlyReflectionsSliderBounds(int width, int height);
     
+    void AddModulationSliders();
+    void SetModulationSliderBounds(int width, int height);
+    
     void AddAudioVisualiser();
 
     void AddEqualisationGraph();
@@ -90,6 +94,13 @@ private:
     std::unique_ptr<juce::Slider> earlyReflectionsSlider;
     std::unique_ptr<juce::Label> earlyReflectionsSliderLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> earlyReflectionsSliderAttachment;
+    
+    std::unique_ptr<ModulationDial> modFreq;
+    std::unique_ptr<ModulationDial> modDepth;
+    std::unique_ptr<juce::Label> modFreqLabel;
+    std::unique_ptr<juce::Label> modDepthLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> modFreqSliderAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> modDepthSliderAttachment;
     
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;
