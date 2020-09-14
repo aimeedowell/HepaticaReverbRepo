@@ -38,6 +38,9 @@
             file="Source/CustomLookAndFeel.cpp"/>
       <FILE id="KijdL3" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
+      <FILE id="rX4HZZ" name="Equalisation.cpp" compile="1" resource="0"
+            file="Source/Equalisation.cpp"/>
+      <FILE id="IRXMRk" name="Equalisation.h" compile="0" resource="0" file="Source/Equalisation.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
