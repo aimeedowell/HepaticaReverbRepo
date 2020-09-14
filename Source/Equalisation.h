@@ -36,6 +36,9 @@ private:
     void AddEqualisationButtons();
     
     void SetEqualisationButtonBounds(int width, int height);
+    void DrawEQRect(juce::Graphics &g);
+    
+    void FillEQRect(juce::Graphics &g);
     ReverbAudioProcessor &audioProcessor;
     
     std::unique_ptr<juce::ImageButton> noEQButton;

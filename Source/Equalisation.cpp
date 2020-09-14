@@ -100,7 +100,23 @@ void Equalisation::buttonStateChanged(juce::Button *button)
 {
 
 }
+void Equalisation::DrawEQRect(juce::Graphics &g)
+{
+    auto rect = juce::Rectangle<float>(float(0), float(0), rectWidth, rectHeight);
+    
+    g.setColour(juce::Colours::grey);
+    g.drawRect(rect, lineThickness);
 }
+
+void Equalisation::FillEQRect(juce::Graphics &g)
+{
+    auto rect = juce::Rectangle<float>(float(0), float(0), rectWidth, rectHeight);
+    
+    g.setColour(juce::Colour(177, 9, 219));
+    g.setOpacity(0.2f);
+    g.fillRect(rect);
+}
+
 void Equalisation::AddEqualisationButtons()
 {
     juce::uint8 colour = 0;
