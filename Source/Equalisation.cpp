@@ -100,6 +100,16 @@ void Equalisation::buttonStateChanged(juce::Button *button)
 {
 
 }
+void Equalisation::DrawNoEqualisation(juce::Graphics &g)
+{
+    FillEQRect(g);
+    
+    g.setColour(juce::Colour(177, 9, 219));
+    g.drawLine(0, noEQLine, rectWidth, noEQLine, lineThickness * 1.5f);
+    
+    DrawEQRect(g);
+}
+
 void Equalisation::DrawEQRect(juce::Graphics &g)
 {
     auto rect = juce::Rectangle<float>(float(0), float(0), rectWidth, rectHeight);
