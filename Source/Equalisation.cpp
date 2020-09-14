@@ -51,6 +51,20 @@ Equalisation::~Equalisation()
     highShelfButton.reset();
 }
 
+void Equalisation::paint(juce::Graphics &g)
+{
+    if (noEQButton->getToggleStateValue() == true)
+        DrawNoEqualisation(g);
+    else if (lowPassButton->getToggleStateValue() == true)
+        DrawLowPass(g);
+    else if (highPassButton->getToggleStateValue() == true)
+        DrawHighPass(g);
+    else if (lowShelfButton->getToggleStateValue() == true)
+        DrawLowShelf(g);
+    else if (highShelfButton->getToggleStateValue() == true)
+        DrawHighShelf(g);
+}
+
 void Equalisation::resized()
 {
     auto width = getWidth();
@@ -96,6 +110,11 @@ void Equalisation::buttonClicked(juce::Button *button)
         lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
         highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
     }
+
+    
+    repaint();
+}
+
 void Equalisation::buttonStateChanged(juce::Button *button)
 {
 
@@ -165,6 +184,7 @@ void Equalisation::DrawNoEqualisation(juce::Graphics &g)
     
     DrawEQRect(g);
 }
+
 
 void Equalisation::DrawEQRect(juce::Graphics &g)
 {
