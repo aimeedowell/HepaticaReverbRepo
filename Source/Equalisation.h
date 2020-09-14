@@ -20,6 +20,10 @@ class Equalisation
 public:
     Equalisation(ReverbAudioProcessor &processor);
     ~Equalisation();
+    
+    const int GetEQHeight() { return getHeight(); };
+    const int GetEQWidth() { return getWidth(); };
+    
 private:
     //juce::Component
     void paint(juce::Graphics&) override;
@@ -56,6 +60,11 @@ private:
     juce::Image lowShelfDown;
     juce::Image highShelf;
     juce::Image highShelfDown;
+    
+    float rectHeight;
+    float rectWidth;
+    float noEQLine;
+    float lineThickness;
 };
 
 #endif /* Equalisation_h */

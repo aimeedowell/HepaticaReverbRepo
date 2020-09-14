@@ -29,6 +29,11 @@ Equalisation::Equalisation(ReverbAudioProcessor &processor)
 , highShelfDown(juce::ImageCache::getFromMemory(BinaryData::HSDown_PNG, BinaryData::HSDown_PNGSize))
 {
     setSize(180, 130);
+    rectHeight = (2 * getHeight())/3;
+    rectWidth = getWidth();
+    noEQLine = getHeight()/6;
+    lineThickness = 2.0f;
+    
     AddEqualisationButtons();
 }
 
