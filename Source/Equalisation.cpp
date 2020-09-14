@@ -53,6 +53,49 @@ void Equalisation::resized()
     
     SetEqualisationButtonBounds(width, height);
 }
+
+void Equalisation::buttonClicked(juce::Button *button)
+{
+    if (button == noEQButton.get())
+    {
+        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+    }
+    else if (button == lowPassButton.get())
+    {
+        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+    }
+    else if (button == highPassButton.get())
+    {
+        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+    }
+    else if (button == lowShelfButton.get())
+    {
+        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+    }
+    else if (button == highShelfButton.get())
+    {
+        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
+    }
+void Equalisation::buttonStateChanged(juce::Button *button)
+{
+
+}
+}
 void Equalisation::AddEqualisationButtons()
 {
     juce::uint8 colour = 0;
