@@ -37,10 +37,23 @@ private:
     
     void DrawPresetBarLines(juce::Graphics &g);
     
+    void SetPresetButtons();
+    
+    void SetPresetButtonBounds();
+    
     void AddPresetLabel();
     void SetLabelBounds();
     
     std::unique_ptr<juce::Label> presetLabel;
+    
+    std::unique_ptr<juce::ImageButton> nextPreset;
+    std::unique_ptr<juce::ImageButton> previousPreset;
+    
+    juce::Image nextPresetImage;
+    juce::Image nextPresetImageDown;
+    juce::Image prevPresetImage;
+    juce::Image prevPresetImageDown;
+    
     juce::String textForLabel;
     juce::uint8 colour = 245;
     int barWidth = 200;
