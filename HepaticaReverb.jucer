@@ -55,6 +55,7 @@
             file="Source/ModulationDial.h"/>
       <FILE id="Ywyu6V" name="PresetBar.cpp" compile="1" resource="0" file="Source/PresetBar.cpp"/>
       <FILE id="V1EbZt" name="PresetBar.h" compile="0" resource="0" file="Source/PresetBar.h"/>
+      <FILE id="lIY1Hl" name="CombFilter.h" compile="0" resource="0" file="Source/CombFilter.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
