@@ -50,6 +50,19 @@ public:
         const double smoothTime = 0.01;
         damping .reset (sampleRate, smoothTime);
         feedback.reset (sampleRate, smoothTime);
+        
+        dsp::ProcessSpec spec;
+        spec.sampleRate = sampleRate;
+        spec.maximumBlockSize = samplesPerBlock;
+        spec.numChannels = numChannels;
+        
+        delayLine.reset();
+        delayLine.prepare(spec);
+        
+        float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
+        delay.setTargetValue(preDelay);
+        
+        delayLine.setDelay(delay.getNextValue());
     }
 
     void reset()
@@ -100,6 +113,16 @@ public:
             wetL *= leftAmp;
             wetR *= rightAmp;
             
+            float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
+            delay.setTargetValue(preDelay);
+            
+            delayLine.setDelay(delay.getNextValue());
+            delayLine.pushSample(0, wetL);
+            delayLine.pushSample(1, wetR);
+        
+            wetL += delayLine.popSample(0, delay.getNextValue());
+            wetR += delayLine.popSample(1, delay.getNextValue());
+            
             float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
 
             left[i]  = (wetL * dryWetLevel) + (left[i]  * (1 - dryWetLevel));
@@ -134,9 +157,10 @@ private:
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
 
-    SmoothedValue<float> damping, feedback;
+    SmoothedValue<float> damping, feedback, delay;
     
     juce::AudioProcessorValueTreeState &treeParameters;
+    juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::None> delayLine{44100};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShroederReverb)
 };
