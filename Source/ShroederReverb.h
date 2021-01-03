@@ -91,6 +91,15 @@ public:
                 wetR = allPass[1][j].process (wetR);
             }
             
+            float panValue = *treeParameters.getRawParameterValue("panningID")/100;
+            float panGain = 0.5 + (float(panValue)/200);
+            
+            auto leftAmp = std::sin((1 - panGain) * (M_PI/2));
+            auto rightAmp = std::sin(panGain * (M_PI/2));
+                
+            wetL *= leftAmp;
+            wetR *= rightAmp;
+            
             float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
 
             left[i]  = (wetL * dryWetLevel) + (left[i]  * (1 - dryWetLevel));
