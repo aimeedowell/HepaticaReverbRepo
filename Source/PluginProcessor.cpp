@@ -88,7 +88,6 @@ void ReverbAudioProcessor::changeProgramName(int index, const juce::String& newN
 
 void ReverbAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    SetDelayValues(sampleRate);
     myReverb->prepareToPlay(sampleRate, samplesPerBlock);
 }
 

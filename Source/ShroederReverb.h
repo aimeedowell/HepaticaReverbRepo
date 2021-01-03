@@ -23,20 +23,11 @@ public:
     ShroederReverb(juce::AudioProcessorValueTreeState &valueTreeState)
     : treeParameters(valueTreeState)
     {
-        prepareToPlay(44100.0);
+        prepareToPlay(44100.0, 100);
         updateDamping();
     }
 
-    //==============================================================================
-    /** Holds the parameters being used by a Reverb object. */
-    struct Parameters
-    {
-        float roomSize   = 0.5f;     /**< Room size, 0 to 1.0, where 1.0 is big, 0 is small. */
-        float damping    = 0.5f;     /**< Damping, 0 to 1.0, where 0 is not damped, 1.0 is fully damped. */
-        float width      = 1.0f;     /**< Reverb width, 0 to 1.0, where 1.0 is very wide. */
-    };
-
-    void prepareToPlay(const double sampleRate)
+    void prepareToPlay(const double sampleRate, int samplesPerBlock)
     {
         jassert (sampleRate > 0);
 
@@ -81,7 +72,7 @@ public:
         for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
             const float input = (left[i] + right[i]) * gain;
-            float outL = 0, outR = 0;
+            float wetL = 0, wetR = 0;
             
             updateDamping();
             
@@ -90,20 +81,20 @@ public:
 
             for (int j = 0; j < numCombs; ++j)  // accumulate the comb filters in parallel
             {
-                outL += comb[0][j].process (input, damp, feedbck);
-                outR += comb[1][j].process (input, damp, feedbck);
+                wetL += comb[0][j].process (input, damp, feedbck);
+                wetR += comb[1][j].process (input, damp, feedbck);
             }
 
             for (int j = 0; j < numAllPasses; ++j)  // run the allpass filters in series
             {
-                outL = allPass[0][j].process (outL);
-                outR = allPass[1][j].process (outR);
+                wetL = allPass[0][j].process (wetL);
+                wetR = allPass[1][j].process (wetR);
             }
             
             float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
 
-            left[i]  = (outL * dryWetLevel) + (left[i]  * (1 - dryWetLevel));
-            right[i] = (outR * dryWetLevel) + (right[i] * (1 - dryWetLevel));
+            left[i]  = (wetL * dryWetLevel) + (left[i]  * (1 - dryWetLevel));
+            right[i] = (wetR * dryWetLevel) + (right[i] * (1 - dryWetLevel));
         }
     }
 
@@ -117,7 +108,7 @@ private:
         
         float roomSizeValue = *treeParameters.getRawParameterValue("reverbSizeID")/100;
 
-        setDamping(parameters.damping * dampScaleFactor,
+        setDamping(damping.getNextValue() * dampScaleFactor,
                         roomSizeValue * roomScaleFactor + roomOffset);
     }
 
@@ -129,13 +120,12 @@ private:
 
     static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
 
-    Parameters parameters;
     float gain = 0.015f;;
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
 
-    SmoothedValue<float> damping, feedback, dryGain, wetGain1, wetGain2;
+    SmoothedValue<float> damping, feedback;
     
     juce::AudioProcessorValueTreeState &treeParameters;
 
