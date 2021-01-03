@@ -104,15 +104,6 @@ public:
                 wetR = allPass[1][j].process (wetR);
             }
             
-            float panValue = *treeParameters.getRawParameterValue("panningID")/100;
-            float panGain = 0.5 + (float(panValue)/200);
-            
-            auto leftAmp = std::sin((1 - panGain) * (M_PI/2));
-            auto rightAmp = std::sin(panGain * (M_PI/2));
-                
-            wetL *= leftAmp;
-            wetR *= rightAmp;
-            
             float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
             delay.setTargetValue(preDelay);
             
@@ -122,6 +113,15 @@ public:
         
             wetL += delayLine.popSample(0, delay.getNextValue());
             wetR += delayLine.popSample(1, delay.getNextValue());
+            
+            float panValue = *treeParameters.getRawParameterValue("panningID");
+            float panGain = 0.5 + (float(panValue)/200);
+            
+            auto leftAmp = std::sin((1 - panGain) * (M_PI/2));
+            auto rightAmp = std::sin(panGain * (M_PI/2));
+                
+            wetL *= leftAmp;
+            wetR *= rightAmp;
             
             float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
 
@@ -150,6 +150,7 @@ private:
         feedback.setTargetValue (roomSizeToUse);
     }
 
+    
     static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
 
     float gain = 0.015f;;
