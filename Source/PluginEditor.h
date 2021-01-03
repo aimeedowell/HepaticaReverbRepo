@@ -42,11 +42,8 @@ private:
     void AddPanSlider();
     void SetPanSliderBounds(int width, int height);
     
-    void AddDecaySlider();
-    void SetDecaySliderBounds(int width, int height);
-    
-    void AddWidthSlider();
-    void SetWidthSliderBounds(int width, int height);
+    void AddWetDrySlider();
+    void SetWetDrySliderBounds(int width, int height);
     
     void AddReverbSizeSlider();
     void SetReverbSizeSliderBounds(int width, int height);
@@ -66,7 +63,7 @@ private:
 
     void AddEqualisationGraph();
 
-    ReverbAudioProcessor& audioProcessor;
+    ReverbAudioProcessor &audioProcessor;
     CustomLookAndFeel reverbLookAndFeel;
     
     std::unique_ptr<juce::Slider> gainSlider;
@@ -78,13 +75,9 @@ private:
     std::unique_ptr<juce::Label> rightPanSliderLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> panSliderAttachment;
     
-    std::unique_ptr<juce::Slider> decaySlider;
-    std::unique_ptr<juce::Label> decaySliderLabel;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> decaySliderAttachment;
-    
-    std::unique_ptr<juce::Slider> widthSlider;
-    std::unique_ptr<juce::Label> widthSliderLabel;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> widthSliderAttachment;
+    std::unique_ptr<juce::Slider> wetDrySlider;
+    std::unique_ptr<juce::Label> drySliderLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> wetDrySliderAttachment;
     
     std::unique_ptr<juce::Slider> reverbSizeSlider;
     std::unique_ptr<juce::Label> reverbSizeSliderLabel;
@@ -98,12 +91,12 @@ private:
     std::unique_ptr<juce::Label> earlyReflectionsSliderLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> earlyReflectionsSliderAttachment;
     
-    std::unique_ptr<ModulationDial> modFreq;
-    std::unique_ptr<ModulationDial> modDepth;
-    std::unique_ptr<juce::Label> modFreqLabel;
-    std::unique_ptr<juce::Label> modDepthLabel;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> modFreqSliderAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> modDepthSliderAttachment;
+    std::unique_ptr<ModulationDial> stereoSpread;
+    std::unique_ptr<ModulationDial> feedback;
+    std::unique_ptr<juce::Label> stereoSpreadLabel;
+    std::unique_ptr<juce::Label> feedbackLabel;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> stereoSpreadSliderAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> feedbackSliderAttachment;
     
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;

@@ -190,8 +190,9 @@ void Equalisation::DrawEQRect(juce::Graphics &g)
 {
     auto rect = juce::Rectangle<float>(float(0), float(0), rectWidth, rectHeight);
     
-    g.setColour(juce::Colours::grey);
-    g.drawRect(rect, lineThickness);
+    g.setOpacity(0.2f);
+    g.setColour(juce::Colours::whitesmoke);
+    g.drawRect(rect, lineThickness * 0.5);
 }
 
 void Equalisation::FillEQRect(juce::Graphics &g)
