@@ -3,7 +3,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+class ShroederReverb;
 
 class ReverbAudioProcessor
     : public juce::AudioProcessor
@@ -61,9 +61,16 @@ public:
 private:
     const juce::AudioProcessorValueTreeState::ParameterLayout CreateParameters();
     
+    void CreateCombFilters();
+    
+    void SetDelayValues(double sampleRate);
+    void SetRateValues();
+    
     juce::AudioProcessorValueTreeState valueTreeState;
     
     std::vector<float> bufferAmplitude;
-
+    
+    std::unique_ptr<ShroederReverb> myReverb;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessor)
 };

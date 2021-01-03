@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "ShroederReverb.h"
 
 ReverbAudioProcessor::ReverbAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -16,7 +17,9 @@ ReverbAudioProcessor::ReverbAudioProcessor()
 #endif
 , valueTreeState(*this, nullptr, "Parameters", CreateParameters())
 , bufferAmplitude({0.0f, 0.0f})
+, myReverb(std::make_unique<ShroederReverb>(valueTreeState))
 {
+
 }
 
 ReverbAudioProcessor::~ReverbAudioProcessor()
@@ -85,12 +88,13 @@ void ReverbAudioProcessor::changeProgramName(int index, const juce::String& newN
 
 void ReverbAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-
+    SetDelayValues(sampleRate);
+    myReverb->prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void ReverbAudioProcessor::releaseResources()
 {
-
+    myReverb->reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -127,6 +131,8 @@ void ReverbAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
         buffer.clear (i, 0, buffer.getNumSamples());
     
     AddGainProcessing(buffer);
+    
+    myReverb->process(buffer);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
