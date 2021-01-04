@@ -149,17 +149,35 @@ private:
         feedback.setTargetValue (roomSizeToUse);
     }
     
-    static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
+    void TuneFilters(int stereoSpread, double sampleRate)
+    {
+        for (int i = 0; i < numCombs; ++i)
+        {
+            comb[0][i].setSize (((int)sampleRate * (combTunings[i])) / 44100);
+            comb[1][i].setSize (((int)sampleRate * (combTunings[i] + stereoSpread)) / 44100);
+        }
 
-    float gain = 0.015f;
+        for (int i = 0; i < numAllPasses; ++i)
+        {
+            allPass[0][i].setSize (((int)sampleRate * (allPassTunings[i])) / 44100);
+            allPass[1][i].setSize (((int)sampleRate * (allPassTunings[i] + stereoSpread)) / 44100);
+        }
+    }
+    
+    static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
+    constexpr static const short combTunings[] = { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 }; // (at 44100Hz)
+    constexpr static const short allPassTunings[] = { 556, 441, 341, 225 };
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
-
+    
     SmoothedValue<float> damping, feedback, delay;
     
     juce::AudioProcessorValueTreeState &treeParameters;
     juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::None> delayLine{44100};
+    
+    float gain = 0.015f;
+    double globeSampleRate;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShroederReverb)
 };
