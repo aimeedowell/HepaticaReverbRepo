@@ -103,7 +103,6 @@ public:
                 wetL = allPass[0][j].process (wetL);
                 wetR = allPass[1][j].process (wetR);
             }
-            
             float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
             delay.setTargetValue(preDelay);
             
@@ -131,7 +130,7 @@ public:
     }
 
 private:
-
+    
     void updateDamping() noexcept
     {
         const float roomScaleFactor = 0.28f;
@@ -149,11 +148,10 @@ private:
         damping.setTargetValue (dampingToUse);
         feedback.setTargetValue (roomSizeToUse);
     }
-
     
     static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
 
-    float gain = 0.015f;;
+    float gain = 0.015f;
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
