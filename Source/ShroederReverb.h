@@ -15,37 +15,25 @@
 #include "AllPassFilter.h"
 
 using namespace juce;
-// shroeders reverb
+
 class ShroederReverb
 {
 public:
-    //==============================================================================
     ShroederReverb(juce::AudioProcessorValueTreeState &valueTreeState)
     : treeParameters(valueTreeState)
     {
         prepareToPlay(44100.0, 100);
-        updateDamping();
+        UpdateDamping();
     }
 
     void prepareToPlay(const double sampleRate, int samplesPerBlock)
     {
         jassert (sampleRate > 0);
-
-        static const short combTunings[] = { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 }; // (at 44100Hz)
-        static const short allPassTunings[] = { 556, 441, 341, 225 };
+        globeSampleRate = sampleRate;
+        
         const int stereoSpread = 23;
 
-        for (int i = 0; i < numCombs; ++i)
-        {
-            comb[0][i].setSize (((int)sampleRate * (combTunings[i] - stereoSpread)) / 44100);
-            comb[1][i].setSize (((int)sampleRate * (combTunings[i] + stereoSpread)) / 44100);
-        }
-
-        for (int i = 0; i < numAllPasses; ++i)
-        {
-            allPass[0][i].setSize (((int)sampleRate * (allPassTunings[i] - stereoSpread)) / 44100);
-            allPass[1][i].setSize (((int)sampleRate * (allPassTunings[i] + stereoSpread)) / 44100);
-        }
+        TuneFilters((int)stereoSpread, sampleRate);
 
         const double smoothTime = 0.01;
         damping .reset (sampleRate, smoothTime);
@@ -87,7 +75,7 @@ public:
             const float input = (left[i] + right[i]) * gain;
             float wetL = 0, wetR = 0;
             
-            updateDamping();
+            UpdateDamping();
             
             const float damp    = damping.getNextValue();
             const float feedbck = feedback.getNextValue();
@@ -131,7 +119,7 @@ public:
 
 private:
     
-    void updateDamping() noexcept
+    void UpdateDamping() noexcept
     {
         const float roomScaleFactor = 0.28f;
         const float roomOffset = 0.7f;
@@ -139,11 +127,11 @@ private:
         
         float roomSizeValue = *treeParameters.getRawParameterValue("reverbSizeID")/100;
 
-        setDamping(damping.getNextValue() * dampScaleFactor,
+        SetDamping(damping.getNextValue() * dampScaleFactor,
                         roomSizeValue * roomScaleFactor + roomOffset);
     }
 
-    void setDamping (const float dampingToUse, const float roomSizeToUse) noexcept
+    void SetDamping (const float dampingToUse, const float roomSizeToUse) noexcept
     {
         damping.setTargetValue (dampingToUse);
         feedback.setTargetValue (roomSizeToUse);
