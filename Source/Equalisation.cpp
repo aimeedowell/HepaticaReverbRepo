@@ -53,9 +53,8 @@ Equalisation::~Equalisation()
 
 void Equalisation::paint(juce::Graphics &g)
 {
-    if (noEQButton->getToggleStateValue() == true)
-        DrawNoEqualisation(g);
-    else if (lowPassButton->getToggleStateValue() == true)
+
+    if (lowPassButton->getToggleStateValue() == true)
         DrawLowPass(g);
     else if (highPassButton->getToggleStateValue() == true)
         DrawHighPass(g);
@@ -63,6 +62,8 @@ void Equalisation::paint(juce::Graphics &g)
         DrawLowShelf(g);
     else if (highShelfButton->getToggleStateValue() == true)
         DrawHighShelf(g);
+    else if (noEQButton->getToggleStateValue() == true || lowPassButton->getToggleStateValue() == false || highPassButton->getToggleStateValue() == false || lowShelfButton->getToggleStateValue() == false || highShelfButton->getToggleStateValue() == false)
+        DrawNoEqualisation(g);
 }
 
 void Equalisation::resized()
@@ -75,43 +76,6 @@ void Equalisation::resized()
 
 void Equalisation::buttonClicked(juce::Button *button)
 {
-    if (button == noEQButton.get())
-    {
-        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-    }
-    else if (button == lowPassButton.get())
-    {
-        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-    }
-    else if (button == highPassButton.get())
-    {
-        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-    }
-    else if (button == lowShelfButton.get())
-    {
-        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-    }
-    else if (button == highShelfButton.get())
-    {
-        noEQButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        lowShelfButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-        highPassButton->setToggleState(false, juce::NotificationType::dontSendNotification);
-    }
-
-    
     repaint();
 }
 
@@ -215,11 +179,11 @@ void Equalisation::AddEqualisationButtons()
     addAndMakeVisible(lowShelfButton.get());
     addAndMakeVisible(highShelfButton.get());
     
-    noEQButton.get()->addListener(this);
-    lowPassButton.get()->addListener(this);
-    highPassButton.get()->addListener(this);
-    lowShelfButton.get()->addListener(this);
-    highShelfButton.get()->addListener(this);
+    noEQButton->addListener(this);
+    lowPassButton->addListener(this);
+    highPassButton->addListener(this);
+    lowShelfButton->addListener(this);
+    highShelfButton->addListener(this);
     
     noEQButton.get()->setImages(false, true, true, noEQ, 0.7f, transparent, noEQDown, 0.5f, transparent, noEQDown, 1.0f,
         transparent);
@@ -228,11 +192,17 @@ void Equalisation::AddEqualisationButtons()
     lowShelfButton.get()->setImages(false, true, true, lowShelf, 0.7f, transparent, lowShelfDown, 0.5f, transparent, lowShelfDown, 1.0f, transparent);
     highShelfButton.get()->setImages(false, true, true, highShelf, 0.7f, transparent, highShelfDown, 0.5f, transparent, highShelfDown, 1.0f, transparent);
     
-    noEQButton.get()->setClickingTogglesState(true);
-    lowPassButton.get()->setClickingTogglesState(true);
-    highPassButton.get()->setClickingTogglesState(true);
-    lowShelfButton.get()->setClickingTogglesState(true);
-    highShelfButton.get()->setClickingTogglesState(true);
+    noEQButton->setClickingTogglesState(true);
+    lowPassButton->setClickingTogglesState(true);
+    highPassButton->setClickingTogglesState(true);
+    lowShelfButton->setClickingTogglesState(true);
+    highShelfButton->setClickingTogglesState(true);
+    
+    noEQButton->setRadioGroupId(34567);
+    lowPassButton->setRadioGroupId(34567);
+    highPassButton->setRadioGroupId(34567);
+    lowShelfButton->setRadioGroupId(34567);
+    highShelfButton->setRadioGroupId(34567);
     
     noEQButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.GetValueTreeState()
                                                                                                 , "noEQID"
