@@ -201,10 +201,10 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
                                                                      "Stereo Spread",   // parameter name
                                                                      juce::NormalisableRange<float>(0.5f, 1.5f, 0.1f), // min, max, stepsize
                                                                      1.0f));  // default value)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("feedbackID", // parameterID
-                                                                     "Feedback",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 99.f, 1.f), // min, max, stepsize
-                                                                     17.f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("dampingID", // parameterID
+                                                                     "Damping",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 100.f, 1.f), // min, max, stepsize
+                                                                     50.f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("noEQID", // parameterID
                                                                     "EQ off",   // parameter name
                                                                     true));  // default value)

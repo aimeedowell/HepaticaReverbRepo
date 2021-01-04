@@ -155,6 +155,7 @@ private:
         const float dampScaleFactor = 0.4f;
         
         float roomSizeValue = *treeParameters.getRawParameterValue("reverbSizeID")/100;
+        float dampValue = *treeParameters.getRawParameterValue("dampingID") /100;
 
         SetDamping(damping.getNextValue() * dampScaleFactor,
                         roomSizeValue * roomScaleFactor + roomOffset);

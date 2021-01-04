@@ -26,9 +26,9 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , earlyReflectionsSlider(std::make_unique<juce::Slider>())
 , earlyReflectionsSliderLabel(std::make_unique<juce::Label>())
 , stereoSpread(std::make_unique<ModulationDial>())
-, feedback(std::make_unique<ModulationDial>())
+, damping(std::make_unique<ModulationDial>())
 , stereoSpreadLabel(std::make_unique<juce::Label>())
-, feedbackLabel(std::make_unique<juce::Label>())
+, dampingLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , presetBar(std::make_unique<PresetBar>())
@@ -78,7 +78,7 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     stereoSpreadSliderAttachment.reset();
     stereoSpread.reset();
     feedbackSliderAttachment.reset();
-    feedback.reset();
+    damping.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
     presetBar.reset();
@@ -247,28 +247,28 @@ void ReverbAudioProcessorEditor::SetEarlyReflectionsSliderBounds(int width, int 
 void ReverbAudioProcessorEditor::AddModulationSliders()
 {
     addAndMakeVisible(stereoSpread.get());
-    addAndMakeVisible(feedback.get());
+    addAndMakeVisible(damping.get());
     addAndMakeVisible(stereoSpreadLabel.get());
-    addAndMakeVisible(feedbackLabel.get());
+    addAndMakeVisible(dampingLabel.get());
     
     stereoSpreadLabel->setText("Stereo Spread", juce::NotificationType::dontSendNotification);
     stereoSpreadLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
-    feedbackLabel->setText("Feedback", juce::NotificationType::dontSendNotification);
-    feedbackLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    dampingLabel->setText("Damping", juce::NotificationType::dontSendNotification);
+    dampingLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     
     stereoSpreadSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
                                                                                                    , "stereoSpreadID"
                                                                                                    , *stereoSpread.get());
     feedbackSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                                                   , "feedbackID"
-                                                                                                   , *feedback.get());
+                                                                                                   , "dampingID"
+                                                                                                   , *damping.get());
 }
 
 void ReverbAudioProcessorEditor::SetModulationSliderBounds(int width, int height)
 {
-    feedback->setBounds(545, 95, feedback->GetModDialWidth(), feedback->GetModDialHeight());
+    damping->setBounds(545, 95, damping->GetModDialWidth(), damping->GetModDialHeight());
     stereoSpread->setBounds(610, 45, stereoSpread->GetModDialWidth(), stereoSpread->GetModDialHeight());
-    feedbackLabel->setBounds(620, 130, 70, 20);
+    dampingLabel->setBounds(620, 130, 70, 20);
     stereoSpreadLabel->setBounds(535, 65, 70, 20);
 }
 

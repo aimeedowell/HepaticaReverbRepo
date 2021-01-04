@@ -92,9 +92,9 @@ private:
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> earlyReflectionsSliderAttachment;
     
     std::unique_ptr<ModulationDial> stereoSpread;
-    std::unique_ptr<ModulationDial> feedback;
+    std::unique_ptr<ModulationDial> damping;
     std::unique_ptr<juce::Label> stereoSpreadLabel;
-    std::unique_ptr<juce::Label> feedbackLabel;
+    std::unique_ptr<juce::Label> dampingLabel;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> stereoSpreadSliderAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> feedbackSliderAttachment;
     
