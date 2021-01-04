@@ -46,6 +46,8 @@ public:
         damping .reset (sampleRate, smoothTime);
         feedback.reset (sampleRate, smoothTime);
         
+        SetCoefficients();
+        
         dsp::ProcessSpec spec;
         spec.sampleRate = sampleRate;
         spec.maximumBlockSize = samplesPerBlock;
@@ -53,6 +55,8 @@ public:
         
         delayLine.reset();
         delayLine.prepare(spec);
+        processorChain.reset();
+        processorChain.prepare(spec);
         mixer->prepare(spec);
         
         float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
@@ -131,6 +135,15 @@ public:
             wetSignalL[i] = wetL;
             wetSignalR[i] = wetR;
         }
+        juce::dsp::AudioBlock<float> wetBlock(wetSignal);
+        juce::dsp::ProcessContextReplacing<float> context(wetBlock);
+        
+        UpdateFilters();
+        
+        processorChain.process(juce::dsp::ProcessContextReplacing<float>(wetBlock));
+        
+        mixer->mixWetSamples(context.getOutputBlock());
+
     }
 
 private:
@@ -168,12 +181,74 @@ private:
         }
     }
     
+    void SetCoefficients()
+    {
+        auto &filter1 = processorChain.get<0>();
+        auto &filter2 = processorChain.get<1>();
+        auto &filter3 = processorChain.get<2>();
+        auto &filter4 = processorChain.get<3>();
+        
+        *filter1.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(globeSampleRate, 3000, 3);
+        *filter2.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(globeSampleRate, 3000, 3);
+        *filter3.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 1.f);
+        *filter4.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 1.f);
+    }
+    
+    void UpdateFilters()
+    {
+        bool noEq = *treeParameters.getRawParameterValue("noEQID");
+        bool isLowPass = *treeParameters.getRawParameterValue("lowPassID");
+        bool isHighPass = *treeParameters.getRawParameterValue("highPassID");
+        bool isLowShelf = *treeParameters.getRawParameterValue("lowShelfID");
+        bool isHighShelf = *treeParameters.getRawParameterValue("highShelfID");
+        
+        if (isLowPass)
+        {
+            processorChain.setBypassed<0>(false);
+            processorChain.setBypassed<1>(true);
+            processorChain.setBypassed<2>(true);
+            processorChain.setBypassed<3>(true);
+        }
+        else if (isHighPass)
+        {
+            processorChain.setBypassed<0>(true);
+            processorChain.setBypassed<1>(false);
+            processorChain.setBypassed<2>(true);
+            processorChain.setBypassed<3>(true);
+        }
+        else if (isLowShelf)
+        {
+            processorChain.setBypassed<0>(true);
+            processorChain.setBypassed<1>(true);
+            processorChain.setBypassed<2>(false);
+            processorChain.setBypassed<3>(true);
+        }
+        else if (isHighShelf)
+        {
+            processorChain.setBypassed<0>(true);
+            processorChain.setBypassed<1>(true);
+            processorChain.setBypassed<2>(true);
+            processorChain.setBypassed<3>(false);
+        }
+        else
+        {
+            processorChain.setBypassed<0>(true);
+            processorChain.setBypassed<1>(true);
+            processorChain.setBypassed<2>(true);
+            processorChain.setBypassed<3>(true);
+        }
+    }
+    
     static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
     constexpr static const short combTunings[] = { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 }; // (at 44100Hz)
     constexpr static const short allPassTunings[] = { 556, 441, 341, 225 };
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
+
+    using Filter = juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>;
+
+    juce::dsp::ProcessorChain<Filter, Filter, Filter, Filter> processorChain;
     
     std::unique_ptr<juce::dsp::DryWetMixer<float>> mixer;
     
