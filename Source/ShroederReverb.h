@@ -190,13 +190,12 @@ private:
         
         *filter1.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(globeSampleRate, 3000, 3);
         *filter2.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(globeSampleRate, 3000, 3);
-        *filter3.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 1.f);
-        *filter4.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 1.f);
+        *filter3.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 3.f);
+        *filter4.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 3.f);
     }
     
     void UpdateFilters()
     {
-        bool noEq = *treeParameters.getRawParameterValue("noEQID");
         bool isLowPass = *treeParameters.getRawParameterValue("lowPassID");
         bool isHighPass = *treeParameters.getRawParameterValue("highPassID");
         bool isLowShelf = *treeParameters.getRawParameterValue("lowShelfID");
