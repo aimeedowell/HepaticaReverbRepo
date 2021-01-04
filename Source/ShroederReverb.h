@@ -20,12 +20,19 @@ class ShroederReverb
 {
 public:
     ShroederReverb(juce::AudioProcessorValueTreeState &valueTreeState)
-    : treeParameters(valueTreeState)
+    : mixer(std::make_unique<juce::dsp::DryWetMixer<float>>())
+    , treeParameters(valueTreeState)
     {
         prepareToPlay(44100.0, 100);
         UpdateDamping();
+        mixer->setMixingRule(juce::dsp::DryWetMixingRule::linear);
     }
 
+    ~ShroederReverb()
+    {
+        mixer.reset();
+    }
+    
     void prepareToPlay(const double sampleRate, int samplesPerBlock)
     {
         jassert (sampleRate > 0);
@@ -46,6 +53,7 @@ public:
         
         delayLine.reset();
         delayLine.prepare(spec);
+        mixer->prepare(spec);
         
         float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
         delay.setTargetValue(preDelay);
@@ -65,14 +73,23 @@ public:
         }
     }
 
-    void process(juce::AudioBuffer<float>& buffer) noexcept
+    void process(juce::AudioBuffer<float> &buffer) noexcept
     {
-        auto* left = buffer.getWritePointer(0);
-        auto* right = buffer.getWritePointer(1);
+        auto wetSignal = buffer;
+        
+        auto *wetSignalL = wetSignal.getWritePointer(0);
+        auto *wetSignalR = wetSignal.getWritePointer(1);
+        
+        juce::dsp::AudioBlock<float> dryBlock(buffer);
+        
+        float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
+        
+        mixer->setWetMixProportion(dryWetLevel);
+        mixer->pushDrySamples(dryBlock);
 
         for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
-            const float input = (left[i] + right[i]) * gain;
+            const float input = (wetSignalL[i] + wetSignalR[i]) * gain;
             float wetL = 0, wetR = 0;
             
             UpdateDamping();
@@ -91,6 +108,7 @@ public:
                 wetL = allPass[0][j].process (wetL);
                 wetR = allPass[1][j].process (wetR);
             }
+
             float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
             delay.setTargetValue(preDelay);
             
@@ -110,10 +128,8 @@ public:
             wetL *= leftAmp;
             wetR *= rightAmp;
             
-            float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
-
-            left[i]  = (wetL * dryWetLevel) + (left[i]  * (1 - dryWetLevel));
-            right[i] = (wetR * dryWetLevel) + (right[i] * (1 - dryWetLevel));
+            wetSignalL[i] = wetL;
+            wetSignalR[i] = wetR;
         }
     }
 
@@ -158,6 +174,8 @@ private:
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
+    
+    std::unique_ptr<juce::dsp::DryWetMixer<float>> mixer;
     
     SmoothedValue<float> damping, feedback, delay;
     
