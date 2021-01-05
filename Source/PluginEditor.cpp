@@ -123,6 +123,7 @@ void ReverbAudioProcessorEditor::AddGainSlider()
 {
     addAndMakeVisible(gainSlider.get());
     addAndMakeVisible(gainSliderLabel.get());
+    gainSliderLabel->setInterceptsMouseClicks(false, false);
     gainSliderLabel->setText("Gain", juce::dontSendNotification);
     gainSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     gainSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -139,6 +140,8 @@ void ReverbAudioProcessorEditor::AddPanSlider()
     addAndMakeVisible(panSlider.get());
     addAndMakeVisible(leftPanSliderLabel.get());
     addAndMakeVisible(rightPanSliderLabel.get());
+    leftPanSliderLabel->setInterceptsMouseClicks(false, false);
+    rightPanSliderLabel->setInterceptsMouseClicks(false, false);
     leftPanSliderLabel->setText("Left", juce::NotificationType::dontSendNotification);
     leftPanSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     rightPanSliderLabel->setText("Right", juce::NotificationType::dontSendNotification);
@@ -155,6 +158,7 @@ void ReverbAudioProcessorEditor::AddWetDrySlider()
 {
     addAndMakeVisible(wetDrySlider.get());
     addAndMakeVisible(drySliderLabel.get());
+    drySliderLabel->setInterceptsMouseClicks(false, false);
     drySliderLabel->setText("Mix", juce::dontSendNotification);
     drySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     wetDrySlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -189,6 +193,7 @@ void ReverbAudioProcessorEditor::AddReverbSizeSlider()
 {
     addAndMakeVisible(reverbSizeSlider.get());
     addAndMakeVisible(reverbSizeSliderLabel.get());
+    reverbSizeSliderLabel->setInterceptsMouseClicks(false, false);
     reverbSizeSliderLabel->setText("Reverb Size", juce::NotificationType::dontSendNotification);
     reverbSizeSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     reverbSizeSlider->addListener(this);
@@ -202,6 +207,7 @@ void ReverbAudioProcessorEditor::AddPreDelaySlider()
 {
     addAndMakeVisible(preDelaySlider.get());
     addAndMakeVisible(preDelaySliderLabel.get());
+    preDelaySliderLabel->setInterceptsMouseClicks(false, false);
     preDelaySliderLabel->setText("Pre-Delay", juce::NotificationType::dontSendNotification);
     preDelaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     preDelaySlider->addListener(this);
@@ -215,6 +221,7 @@ void ReverbAudioProcessorEditor::AddEarlyReflectionsSlider()
 {
     addAndMakeVisible(earlyReflectionsSlider.get());
     addAndMakeVisible(earlyReflectionsSliderLabel.get());
+    earlyReflectionsSliderLabel->setInterceptsMouseClicks(false, false);
     earlyReflectionsSliderLabel->setText("Early Reflections", juce::NotificationType::dontSendNotification);
     earlyReflectionsSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     earlyReflectionsSlider->addListener(this);
@@ -248,7 +255,8 @@ void ReverbAudioProcessorEditor::AddModulationSliders()
     addAndMakeVisible(damping.get());
     addAndMakeVisible(stereoSpreadLabel.get());
     addAndMakeVisible(dampingLabel.get());
-    
+    stereoSpreadLabel->setInterceptsMouseClicks(false, false);
+    dampingLabel->setInterceptsMouseClicks(false, false);
     stereoSpreadLabel->setText("Stereo Spread", juce::NotificationType::dontSendNotification);
     stereoSpreadLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     dampingLabel->setText("Damping", juce::NotificationType::dontSendNotification);
@@ -296,7 +304,7 @@ void ReverbAudioProcessorEditor::AddEqualisationGraph()
 {
     addAndMakeVisible(eqGraphLabel.get());
     addAndMakeVisible(eqGraph.get());
-    
+    eqGraphLabel->setInterceptsMouseClicks(false, false);
     eqGraphLabel->setText("Equalisation", juce::NotificationType::dontSendNotification);
     eqGraphLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     
