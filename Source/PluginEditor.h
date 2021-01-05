@@ -3,7 +3,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "PluginProcessor.h"
 
 #include "CustomLookAndFeel.h"
 
@@ -11,6 +10,7 @@ class AudioVisualiserMeter;
 class Equalisation;
 class ModulationDial;
 class PresetBar;
+class ReverbAudioProcessor;
 
 class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
