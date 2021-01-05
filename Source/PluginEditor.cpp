@@ -17,20 +17,18 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , panSlider(std::make_unique<juce::Slider>())
 , leftPanSliderLabel(std::make_unique<juce::Label>())
 , rightPanSliderLabel(std::make_unique<juce::Label>())
-, decaySlider(std::make_unique<juce::Slider>())
-, decaySliderLabel(std::make_unique<juce::Label>())
-, widthSlider(std::make_unique<juce::Slider>())
-, widthSliderLabel(std::make_unique<juce::Label>())
+, wetDrySlider(std::make_unique<juce::Slider>())
+, drySliderLabel(std::make_unique<juce::Label>())
 , reverbSizeSlider(std::make_unique<juce::Slider>())
 , reverbSizeSliderLabel(std::make_unique<juce::Label>())
 , preDelaySlider(std::make_unique<juce::Slider>())
 , preDelaySliderLabel(std::make_unique<juce::Label>())
 , earlyReflectionsSlider(std::make_unique<juce::Slider>())
 , earlyReflectionsSliderLabel(std::make_unique<juce::Label>())
-, modFreq(std::make_unique<ModulationDial>())
-, modDepth(std::make_unique<ModulationDial>())
-, modFreqLabel(std::make_unique<juce::Label>())
-, modDepthLabel(std::make_unique<juce::Label>())
+, stereoSpread(std::make_unique<ModulationDial>(audioProcessor, "stereoSpreadID"))
+, damping(std::make_unique<ModulationDial>(audioProcessor, "dampingID"))
+, stereoSpreadLabel(std::make_unique<juce::Label>())
+, dampingLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , presetBar(std::make_unique<PresetBar>())
@@ -42,8 +40,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     setSize (830, 350);
     
     AddGainSlider();
-    AddDecaySlider();
-    AddWidthSlider();
+    AddWetDrySlider();
     AddReverbSizeSlider();
     AddPreDelaySlider();
     AddEarlyReflectionsSlider();
@@ -66,12 +63,9 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     panSlider.reset();
     leftPanSliderLabel.reset();
     rightPanSliderLabel.reset();
-    decaySliderAttachment.reset();
-    decaySlider.reset();
-    decaySliderLabel.reset();
-    widthSliderAttachment.reset();
-    widthSlider.reset();
-    widthSliderLabel.reset();
+    wetDrySliderAttachment.reset();
+    wetDrySlider.reset();
+    drySliderLabel.reset();
     reverbSizeSliderAttachment.reset();
     reverbSizeSlider.reset();
     reverbSizeSliderLabel.reset();
@@ -81,10 +75,8 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     earlyReflectionsSliderAttachment.reset();
     earlyReflectionsSlider.reset();
     earlyReflectionsSliderLabel.reset();
-    modFreqSliderAttachment.reset();
-    modFreq.reset();
-    modDepthSliderAttachment.reset();
-    modDepth.reset();
+    stereoSpread.reset();
+    damping.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
     presetBar.reset();
@@ -105,8 +97,7 @@ void ReverbAudioProcessorEditor::resized()
     
     SetGainSliderBounds(width, height);
     SetPanSliderBounds(width, height);
-    SetDecaySliderBounds(width, height);
-    SetWidthSliderBounds(width, height);
+    SetWetDrySliderBounds(width, height);
     SetReverbSizeSliderBounds(width, height);
     SetPreDelaySliderBounds(width, height);
     SetEarlyReflectionsSliderBounds(width, height);
@@ -160,33 +151,18 @@ void ReverbAudioProcessorEditor::AddPanSlider()
                                                                                                 , *panSlider.get());
 }
 
-void ReverbAudioProcessorEditor::AddDecaySlider()
+void ReverbAudioProcessorEditor::AddWetDrySlider()
 {
-    addAndMakeVisible(decaySlider.get());
-    addAndMakeVisible(decaySliderLabel.get());
-    decaySliderLabel->setText("Decay", juce::dontSendNotification);
-    decaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
-    decaySlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    decaySlider->setDoubleClickReturnValue(true, 0.0);
-    decaySlider->addListener(this);
-    decaySliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                             , "decayID"
-                                                                             , *decaySlider.get());
-    
-}
-
-void ReverbAudioProcessorEditor::AddWidthSlider()
-{
-    addAndMakeVisible(widthSlider.get());
-    addAndMakeVisible(widthSliderLabel.get());
-    widthSliderLabel->setText("Width", juce::dontSendNotification);
-    widthSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
-    widthSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    widthSlider->setDoubleClickReturnValue(true, 0.0);
-    widthSlider->addListener(this);
-    widthSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                             , "widthID"
-                                                                             , *widthSlider.get());
+    addAndMakeVisible(wetDrySlider.get());
+    addAndMakeVisible(drySliderLabel.get());
+    drySliderLabel->setText("Mix", juce::dontSendNotification);
+    drySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    wetDrySlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    wetDrySlider->setDoubleClickReturnValue(true, 0.0);
+    wetDrySlider->addListener(this);
+    wetDrySliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                             , "wetDryID"
+                                                                             , *wetDrySlider.get());
     
 }
 
@@ -203,16 +179,10 @@ void ReverbAudioProcessorEditor::SetPanSliderBounds(int width, int height)
     rightPanSliderLabel->setBounds(545, 320, 40, 30);
 }
 
-void ReverbAudioProcessorEditor::SetDecaySliderBounds(int width, int height)
+void ReverbAudioProcessorEditor::SetWetDrySliderBounds(int width, int height)
 {
-    decaySlider->setBounds(35, 50 , 60, 280);
-    decaySliderLabel->setBounds(40, 315, 40, 30);
-}
-
-void ReverbAudioProcessorEditor::SetWidthSliderBounds(int width, int height)
-{
-    widthSlider->setBounds(83, 180 , 60, 150);
-    widthSliderLabel->setBounds(90, 315, 40, 30);
+    wetDrySlider->setBounds(35, 50 , 60, 280);
+    drySliderLabel->setBounds(40, 315, 40, 30);
 }
 
 void ReverbAudioProcessorEditor::AddReverbSizeSlider()
@@ -274,30 +244,23 @@ void ReverbAudioProcessorEditor::SetEarlyReflectionsSliderBounds(int width, int 
 
 void ReverbAudioProcessorEditor::AddModulationSliders()
 {
-    addAndMakeVisible(modFreq.get());
-    addAndMakeVisible(modDepth.get());
-    addAndMakeVisible(modFreqLabel.get());
-    addAndMakeVisible(modDepthLabel.get());
+    addAndMakeVisible(stereoSpread.get());
+    addAndMakeVisible(damping.get());
+    addAndMakeVisible(stereoSpreadLabel.get());
+    addAndMakeVisible(dampingLabel.get());
     
-    modFreqLabel->setText("Mod Freq", juce::NotificationType::dontSendNotification);
-    modFreqLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
-    modDepthLabel->setText("Mod Depth", juce::NotificationType::dontSendNotification);
-    modDepthLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
-    
-    modFreqSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                                                   , "modFreqID"
-                                                                                                   , *modFreq.get());
-    modDepthSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                                                   , "modDepthID"
-                                                                                                   , *modDepth.get());
+    stereoSpreadLabel->setText("Stereo Spread", juce::NotificationType::dontSendNotification);
+    stereoSpreadLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
+    dampingLabel->setText("Damping", juce::NotificationType::dontSendNotification);
+    dampingLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
 }
 
 void ReverbAudioProcessorEditor::SetModulationSliderBounds(int width, int height)
 {
-    modDepth->setBounds(545, 95, modDepth->GetModDialWidth(), modDepth->GetModDialHeight());
-    modFreq->setBounds(610, 45, modFreq->GetModDialWidth(), modFreq->GetModDialHeight());
-    modDepthLabel->setBounds(620, 130, 70, 20);
-    modFreqLabel->setBounds(535, 65, 70, 20);
+    damping->setBounds(545, 95, damping->GetModDialWidth(), damping->GetModDialHeight());
+    stereoSpread->setBounds(610, 45, stereoSpread->GetModDialWidth(), stereoSpread->GetModDialHeight());
+    dampingLabel->setBounds(620, 135, 70, 30);
+    stereoSpreadLabel->setBounds(515, 50, 90, 30);
 }
 
 void ReverbAudioProcessorEditor::AddAudioVisualiser()

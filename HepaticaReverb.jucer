@@ -55,6 +55,12 @@
             file="Source/ModulationDial.h"/>
       <FILE id="Ywyu6V" name="PresetBar.cpp" compile="1" resource="0" file="Source/PresetBar.cpp"/>
       <FILE id="V1EbZt" name="PresetBar.h" compile="0" resource="0" file="Source/PresetBar.h"/>
+      <FILE id="AgLwGt" name="AllPassFilter.h" compile="0" resource="0" file="Source/AllPassFilter.h"/>
+      <FILE id="lIY1Hl" name="CombFilter.h" compile="0" resource="0" file="Source/CombFilter.h"/>
+      <FILE id="pGtcmr" name="ShroederReverb.h" compile="0" resource="0"
+            file="Source/ShroederReverb.h"/>
+      <FILE id="OZHNVP" name="ShroederReverb.cpp" compile="1" resource="0"
+            file="Source/ShroederReverb.cpp"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
@@ -77,6 +83,7 @@
         <MODULEPATH id="juce_graphics" path="../../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../../../../Applications/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../../../../Applications/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../../../Applications/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
@@ -90,6 +97,7 @@
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>

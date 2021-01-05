@@ -7,12 +7,16 @@
 //
 #include "ModulationDial.h"
 
+#include "PluginProcessor.h"
+
 #include <stdio.h>
 
-ModulationDial::ModulationDial()
-: sliderImage(juce::ImageCache::getFromMemory(BinaryData::ModulationSlider_PNG, BinaryData::ModulationSlider_PNGSize))
+ModulationDial::ModulationDial(ReverbAudioProcessor& p, juce::String treeID)
+: audioProcessor(p)
+, sliderImage(juce::ImageCache::getFromMemory(BinaryData::ModulationSlider_PNG, BinaryData::ModulationSlider_PNGSize))
 , sliderComponent(std::make_unique<juce::ImageComponent>())
 , modSlider(std::make_unique<juce::Slider>())
+, treeID(treeID)
 {
     setSize(75, 75);
     AddSliderImage();
@@ -50,6 +54,9 @@ void ModulationDial::AddRotarySlider()
     addAndMakeVisible(modSlider.get());
     modSlider.get()->addListener(this);
     modSlider.get()->setSliderStyle(juce::Slider::RotaryHorizontalVerticalDrag);
+    modSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                   , treeID
+                                                                                                   , *modSlider.get());
     
 }
 

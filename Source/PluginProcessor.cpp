@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "ShroederReverb.h"
 
 ReverbAudioProcessor::ReverbAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -16,7 +17,9 @@ ReverbAudioProcessor::ReverbAudioProcessor()
 #endif
 , valueTreeState(*this, nullptr, "Parameters", CreateParameters())
 , bufferAmplitude({0.0f, 0.0f})
+, myReverb(std::make_unique<ShroederReverb>(valueTreeState))
 {
+
 }
 
 ReverbAudioProcessor::~ReverbAudioProcessor()
@@ -85,12 +88,12 @@ void ReverbAudioProcessor::changeProgramName(int index, const juce::String& newN
 
 void ReverbAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-
+    myReverb->prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void ReverbAudioProcessor::releaseResources()
 {
-
+    myReverb->reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -127,6 +130,8 @@ void ReverbAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
         buffer.clear (i, 0, buffer.getNumSamples());
     
     AddGainProcessing(buffer);
+    
+    myReverb->process(buffer);
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
@@ -176,34 +181,30 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
                                                                      "Panning",   // parameter name
                                                                      juce::NormalisableRange<float>(-100.0f, 100.0f, 1.0f, 1.0f), // min, max, stepsize
                                                                      0.0f));  // default value)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("decayID", // parameterID
-                                                                     "Decay",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("wetDryID", // parameterID
+                                                                     "Mix",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), // min, max, stepsize
                                                                      50.0f));  // default value)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("widthID", // parameterID
-                                                                     "Width",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 10.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
-                                                                     4.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("reverbSizeID", // parameterID
                                                                      "Reverb Size",   // parameter name
-                                                                     juce::NormalisableRange<float>(200.0f, 6000.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
-                                                                     3000.0f));  // default value)
+                                                                     juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f), // min, max, stepsize, skew factor
+                                                                     50.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("preDelayID", // parameterID
                                                                      "Pre-Delay",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
+                                                                     juce::NormalisableRange<float>(0.0f, 20.f, 1.0f, 0.5f), // min, max, stepsize, skew factor
                                                                      5.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("earlyReflectionsID", // parameterID
                                                                      "Early Reflections",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
-                                                                     5.0f));  // default value)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("modFreqID", // parameterID
-                                                                     "Mod Freq",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
-                                                                     5.0f));  // default value)
-    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("modDepthID", // parameterID
-                                                                     "Mod Depth",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
-                                                                     5.0f));  // default value)
+                                                                     juce::NormalisableRange<float>(0.0f, 99.0f, 1.0f), // min, max, stepsize
+                                                                     50.0f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("stereoSpreadID", // parameterID
+                                                                     "Stereo Spread",   // parameter name
+                                                                     juce::NormalisableRange<float>(-200.f, 200.f, 1.f), // min, max, stepsize
+                                                                     0.0f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterFloat>("dampingID", // parameterID
+                                                                     "Damping",   // parameter name
+                                                                     juce::NormalisableRange<float>(0.0f, 100.f, 1.f), // min, max, stepsize
+                                                                     50.f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("noEQID", // parameterID
                                                                     "EQ off",   // parameter name
                                                                     true));  // default value)
