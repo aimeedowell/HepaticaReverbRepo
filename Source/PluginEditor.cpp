@@ -25,8 +25,8 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , preDelaySliderLabel(std::make_unique<juce::Label>())
 , earlyReflectionsSlider(std::make_unique<juce::Slider>())
 , earlyReflectionsSliderLabel(std::make_unique<juce::Label>())
-, stereoSpread(std::make_unique<ModulationDial>())
-, damping(std::make_unique<ModulationDial>())
+, stereoSpread(std::make_unique<ModulationDial>(audioProcessor, "stereoSpreadID"))
+, damping(std::make_unique<ModulationDial>(audioProcessor, "dampingID"))
 , stereoSpreadLabel(std::make_unique<juce::Label>())
 , dampingLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
@@ -75,9 +75,7 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     earlyReflectionsSliderAttachment.reset();
     earlyReflectionsSlider.reset();
     earlyReflectionsSliderLabel.reset();
-    stereoSpreadSliderAttachment.reset();
     stereoSpread.reset();
-    feedbackSliderAttachment.reset();
     damping.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
@@ -255,13 +253,6 @@ void ReverbAudioProcessorEditor::AddModulationSliders()
     stereoSpreadLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     dampingLabel->setText("Damping", juce::NotificationType::dontSendNotification);
     dampingLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
-    
-    stereoSpreadSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                                                   , "stereoSpreadID"
-                                                                                                   , *stereoSpread.get());
-    feedbackSliderAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(audioProcessor.GetValueTreeState()
-                                                                                                   , "dampingID"
-                                                                                                   , *damping.get());
 }
 
 void ReverbAudioProcessorEditor::SetModulationSliderBounds(int width, int height)

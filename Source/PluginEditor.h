@@ -95,8 +95,6 @@ private:
     std::unique_ptr<ModulationDial> damping;
     std::unique_ptr<juce::Label> stereoSpreadLabel;
     std::unique_ptr<juce::Label> dampingLabel;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> stereoSpreadSliderAttachment;
-    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> feedbackSliderAttachment;
     
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;

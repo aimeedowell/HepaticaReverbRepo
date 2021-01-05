@@ -11,12 +11,14 @@
 
 #include <JuceHeader.h>
 
+class ReverbAudioProcessor;
+
 class ModulationDial
     : public juce::Slider
     , public juce::Slider::Listener
 {
 public:
-    ModulationDial();
+    ModulationDial(ReverbAudioProcessor& p, juce::String treeID);
     ~ModulationDial();
     
     //juce::Slider
@@ -36,11 +38,15 @@ private:
     void AddRotarySlider();
     void SetRotarySliderBounds(int width, int height);
     
+    ReverbAudioProcessor &audioProcessor;
+    
     juce::Image sliderImage;
     std::unique_ptr<juce::ImageComponent> sliderComponent;
     
     std::unique_ptr<juce::Slider> modSlider;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> modSliderAttachment;
+    
+    juce::String treeID;
 };
 
 #endif /* ModulationDial_h */
