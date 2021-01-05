@@ -259,8 +259,8 @@ void ReverbAudioProcessorEditor::SetModulationSliderBounds(int width, int height
 {
     damping->setBounds(545, 95, damping->GetModDialWidth(), damping->GetModDialHeight());
     stereoSpread->setBounds(610, 45, stereoSpread->GetModDialWidth(), stereoSpread->GetModDialHeight());
-    dampingLabel->setBounds(620, 130, 70, 30);
-    stereoSpreadLabel->setBounds(535, 65, 70, 20);
+    dampingLabel->setBounds(620, 135, 70, 30);
+    stereoSpreadLabel->setBounds(515, 50, 90, 30);
 }
 
 void ReverbAudioProcessorEditor::AddAudioVisualiser()
