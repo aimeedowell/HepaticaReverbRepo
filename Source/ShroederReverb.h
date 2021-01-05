@@ -100,17 +100,26 @@ public:
             
             const float damp    = damping.getNextValue();
             const float feedbck = feedback.getNextValue();
+            
+            float earlyGain = *treeParameters.getRawParameterValue("earlyReflectionsID")/100;
+            earlyReflectFeedback.setTargetValue(earlyGain);
+            
+            for (int j = 0; j < numAllPasses; ++j)  // run the early reflection allpass filters in series
+            {
+                wetL = earlyReflections[0][j].process(wetL, earlyReflectFeedback.getNextValue());
+                wetR = earlyReflections[1][j].process(wetR, earlyReflectFeedback.getNextValue());
+            }
 
             for (int j = 0; j < numCombs; ++j)  // accumulate the comb filters in parallel
             {
-                wetL += comb[0][j].process (input, damp, feedbck);
-                wetR += comb[1][j].process (input, damp, feedbck);
+                wetL += comb[0][j].process(input, damp, feedbck);
+                wetR += comb[1][j].process(input, damp, feedbck);
             }
 
             for (int j = 0; j < numAllPasses; ++j)  // run the allpass filters in series
             {
-                wetL = allPass[0][j].process (wetL);
-                wetR = allPass[1][j].process (wetR);
+                wetL = allPass[0][j].process(wetL, 0.5f);
+                wetR = allPass[1][j].process(wetR, 0.5f);
             }
 
             float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
@@ -156,6 +165,7 @@ private:
         
         float roomSizeValue = *treeParameters.getRawParameterValue("reverbSizeID")/100;
         float dampValue = *treeParameters.getRawParameterValue("dampingID") /100;
+        damping.setTargetValue(dampValue);
 
         SetDamping(damping.getNextValue() * dampScaleFactor,
                         roomSizeValue * roomScaleFactor + roomOffset);
@@ -169,6 +179,12 @@ private:
     
     void TuneFilters(int stereoSpread, double sampleRate)
     {
+        for (int i = 0; i < numAllPasses; ++i)
+        {
+            earlyReflections[0][i].setSize (((int)sampleRate * (earlyReflectTunings[i])) / 44100);
+            earlyReflections[1][i].setSize (((int)sampleRate * (earlyReflectTunings[i] + stereoSpread)) / 44100);
+        }
+        
         for (int i = 0; i < numCombs; ++i)
         {
             comb[0][i].setSize (((int)sampleRate * (combTunings[i])) / 44100);
@@ -242,9 +258,12 @@ private:
     static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
     constexpr static const short combTunings[] = { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 }; // (at 44100Hz)
     constexpr static const short allPassTunings[] = { 556, 441, 341, 225 };
+    constexpr static const short earlyReflectTunings[] = { 56, 41, 31, 25, 10, 5, 3};
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
+    
+    AllPassFilter earlyReflections [numChannels][numAllPasses]; //create allpass for each channel
 
     using Filter = juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>;
 
@@ -252,7 +271,7 @@ private:
     
     std::unique_ptr<juce::dsp::DryWetMixer<float>> mixer;
     
-    SmoothedValue<float> damping, feedback, delay;
+    SmoothedValue<float> damping, feedback, delay, earlyReflectFeedback;
     
     juce::AudioProcessorValueTreeState &treeParameters;
     juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::None> delayLine{44100};

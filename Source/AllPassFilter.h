@@ -35,10 +35,10 @@ public:
         buffer.clear ((size_t) bufferSize);
     }
 
-    float process (const float input) noexcept
+    float process (const float input, const float feedbackLevel) noexcept
     {
         const float bufferedValue = buffer [bufferIndex];
-        float temp = input + (bufferedValue * 0.5f);
+        float temp = input + (bufferedValue * feedbackLevel);
         JUCE_UNDENORMALISE (temp);
         buffer [bufferIndex] = temp;
         bufferIndex = (bufferIndex + 1) % bufferSize;

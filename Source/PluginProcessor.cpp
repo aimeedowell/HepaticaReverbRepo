@@ -195,8 +195,8 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
                                                                      5.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("earlyReflectionsID", // parameterID
                                                                      "Early Reflections",   // parameter name
-                                                                     juce::NormalisableRange<float>(0.0f, 20.0f, 1.0f, 0.5f), // min, max, stepsize, skew factor
-                                                                     5.0f));  // default value)
+                                                                     juce::NormalisableRange<float>(0.0f, 99.0f, 1.0f), // min, max, stepsize
+                                                                     50.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("stereoSpreadID", // parameterID
                                                                      "Stereo Spread",   // parameter name
                                                                      juce::NormalisableRange<float>(0.5f, 1.5f, 0.1f), // min, max, stepsize
