@@ -132,6 +132,16 @@ void ShroederReverb::process(juce::AudioBuffer<float> &buffer) noexcept
         wetL *= leftAmp;
         wetR *= rightAmp;
         
+        // Apply stereo widdening to the signals
+        float stereoWidth = *treeParameters.getRawParameterValue("stereoSpreadID")/100;
+        auto side = 0.5 * (wetL - wetR);
+        auto mid = 0.5 * (wetL + wetR);
+        auto scaledSide = stereoWidth * side;
+        auto scaledMid = (2 - stereoWidth) * mid;
+
+        wetL = scaledMid + scaledSide;
+        wetR = scaledMid - scaledSide;
+        
         wetSignalL[i] = wetL;
         wetSignalR[i] = wetR;
     }
