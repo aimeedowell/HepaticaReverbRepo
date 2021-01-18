@@ -6,7 +6,6 @@
 #include "AudioVisualiserMeter.h"
 #include "Equalisation.h"
 #include "ModulationDial.h"
-#include "PresetBar.h"
 
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
@@ -31,7 +30,6 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , dampingLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
-, presetBar(std::make_unique<PresetBar>())
 , eqGraph(std::make_unique<Equalisation>(audioProcessor))
 , eqGraphLabel(std::make_unique<juce::Label>())
 {
@@ -47,7 +45,6 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     AddModulationSliders();
     AddPanSlider();
     AddAudioVisualiser();
-    AddPresetBar();
     AddEqualisationGraph();
     
     startTimer(10);
@@ -79,7 +76,6 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     damping.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
-    presetBar.reset();
     eqGraph.reset();
     eqGraphLabel.reset();
     setLookAndFeel(nullptr);
@@ -291,14 +287,6 @@ void ReverbAudioProcessorEditor::SetAudioVisualiserBounds(AudioVisualiserMeter *
     
     meter->setBounds(getWidth() - meterPosition, 30 + yPosition, meterWidth, meterHeight);
 }
-
-void ReverbAudioProcessorEditor::AddPresetBar()
-{
-    addAndMakeVisible(presetBar.get());
-    auto position = getWidth()/2 - presetBar->GetPresetBarWidth()/2;
-    presetBar.get()->setBounds(position, 15, presetBar->GetPresetBarWidth(), presetBar->GetPresetBarHeight());
-}
-
 
 void ReverbAudioProcessorEditor::AddEqualisationGraph()
 {

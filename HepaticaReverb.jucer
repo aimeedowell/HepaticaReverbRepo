@@ -53,8 +53,6 @@
             file="Source/ModulationDial.cpp"/>
       <FILE id="vBCkZB" name="ModulationDial.h" compile="0" resource="0"
             file="Source/ModulationDial.h"/>
-      <FILE id="Ywyu6V" name="PresetBar.cpp" compile="1" resource="0" file="Source/PresetBar.cpp"/>
-      <FILE id="V1EbZt" name="PresetBar.h" compile="0" resource="0" file="Source/PresetBar.h"/>
       <FILE id="AgLwGt" name="AllPassFilter.h" compile="0" resource="0" file="Source/AllPassFilter.h"/>
       <FILE id="lIY1Hl" name="CombFilter.h" compile="0" resource="0" file="Source/CombFilter.h"/>
       <FILE id="pGtcmr" name="ShroederReverb.h" compile="0" resource="0"
