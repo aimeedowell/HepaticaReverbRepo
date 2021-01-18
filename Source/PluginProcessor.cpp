@@ -156,12 +156,10 @@ juce::AudioProcessorEditor* ReverbAudioProcessor::createEditor()
 
 void ReverbAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-    juce::MemoryOutputStream(destData, true).writeFloat(*valueTreeState.getRawParameterValue("gainID"));
 }
 
 void ReverbAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
-    *valueTreeState.getRawParameterValue("gainID") = juce::MemoryInputStream(data, static_cast<size_t>(sizeInBytes), false).readFloat();
 }
 
 juce::AudioProcessorValueTreeState &ReverbAudioProcessor::GetValueTreeState()
