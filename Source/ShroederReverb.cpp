@@ -14,7 +14,6 @@ ShroederReverb::ShroederReverb(juce::AudioProcessorValueTreeState &valueTreeStat
 : mixer(std::make_unique<juce::dsp::DryWetMixer<float>>())
 , treeParameters(valueTreeState)
 {
-    prepareToPlay(44100.0, 100);
     UpdateDamping();
     mixer->setMixingRule(juce::dsp::DryWetMixingRule::linear);
 }

@@ -18,12 +18,12 @@ class AllPassFilter
 public:
     AllPassFilter() noexcept {}
 
-    void setSize (const int size)
+    void setSize(const int size)
     {
         if (size != bufferSize)
         {
             bufferIndex = 0;
-            buffer.malloc (size);
+            buffer.malloc(size);
             bufferSize = size;
         }
 
@@ -32,14 +32,13 @@ public:
 
     void clear() noexcept
     {
-        buffer.clear ((size_t) bufferSize);
+        buffer.clear((size_t) bufferSize);
     }
 
-    float process (const float input, const float feedbackLevel) noexcept
+    float process(const float input, const float feedbackLevel) noexcept
     {
         const float bufferedValue = buffer [bufferIndex];
         float temp = input + (bufferedValue * feedbackLevel);
-        JUCE_UNDENORMALISE (temp);
         buffer [bufferIndex] = temp;
         bufferIndex = (bufferIndex + 1) % bufferSize;
         return bufferedValue - input;

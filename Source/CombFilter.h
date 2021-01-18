@@ -18,12 +18,12 @@ class CombFilter
 public:
     CombFilter() noexcept {}
 
-    void setSize (const int size)
+    void setSize(const int size)
     {
         if (size != bufferSize)
         {
             bufferIndex = 0;
-            buffer.malloc (size);
+            buffer.malloc(size);
             bufferSize = size;
         }
 
@@ -33,17 +33,14 @@ public:
     void clear() noexcept
     {
         last = 0;
-        buffer.clear ((size_t) bufferSize);
+        buffer.clear((size_t) bufferSize);
     }
 
-    float process (const float input, const float damp, const float feedbackLevel) noexcept
+    float process(const float input, const float damp, const float feedbackLevel) noexcept
     {
         const float output = buffer[bufferIndex];
         last = (output * (1.0f - damp)) + (last * damp);
-        JUCE_UNDENORMALISE (last);
-
         float temp = input + (last * feedbackLevel);
-        JUCE_UNDENORMALISE (temp);
         buffer[bufferIndex] = temp;
         bufferIndex = (bufferIndex + 1) % bufferSize;
         return output;
