@@ -204,10 +204,10 @@ void ShroederReverb::SetCoefficients()
     auto &filter3 = processorChain.get<2>();
     auto &filter4 = processorChain.get<3>();
     
-    *filter1.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(globeSampleRate, 3000, 3);
+    *filter1.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(globeSampleRate, 500, 3);
     *filter2.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(globeSampleRate, 3000, 3);
-    *filter3.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 3.f);
-    *filter4.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 3000, 3, 3.f);
+    *filter3.state = *juce::dsp::IIR::Coefficients<float>::makeLowShelf(globeSampleRate, 500, 3, 3.f);
+    *filter4.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(globeSampleRate, 3000, 3, 3.f);
 }
 
 void ShroederReverb::UpdateFilters()

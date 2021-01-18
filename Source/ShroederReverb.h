@@ -42,13 +42,12 @@ private:
     void UpdateFilters();
     
     static const int numCombs = 4, numAllPasses = 2, numChannels = 2;
-    constexpr static const short combTunings[] = { 1116, 1188, 1277, 1356, 1422, 1491, 1557, 1617 }; // (at 44100Hz)
-    constexpr static const short allPassTunings[] = { 556, 441, 341, 225 };
+    constexpr static const short combTunings[] = { 1557, 1617, 1491, 1422, 1277, 1356, 1188, 1116 }; // (at 44100Hz) taken from 'FreeVerb'
+    constexpr static const short allPassTunings[] = { 225, 556, 441, 341 }; // (at 44100Hz) taken from 'FreeVerb'
     constexpr static const short earlyReflectTunings[] = { 56, 41, 31, 25, 10, 5, 3};
 
     CombFilter comb [numChannels][numCombs]; //create comb for each channel
     AllPassFilter allPass [numChannels][numAllPasses]; //create allpass for each channel
-    
     AllPassFilter earlyReflections [numChannels][numAllPasses]; //create allpass for each channel
 
     using Filter = juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>, juce::dsp::IIR::Coefficients<float>>;
