@@ -15,6 +15,7 @@ class ReverbAudioProcessor;
 class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
     , public juce::Slider::Listener
+    , public juce::Button::Listener
     , private juce::Timer
 {
 public:
@@ -28,6 +29,10 @@ public:
     //juce::Slider
     void sliderValueChanged(juce::Slider* slider) override {};
     
+    //juce::ButtonListener
+    void buttonClicked(juce::Button*) override {};
+    void buttonStateChanged(juce::Button*) override {};
+    
     //juce::Timer
     void timerCallback() override;
     
@@ -35,6 +40,9 @@ public:
 
 private:
     void AddCommonPluginBackground(juce::Graphics &g);
+    
+    void AddBypassButton();
+    void SetBypassButtonBounds(int width, int height);
     
     void AddGainSlider();
     void SetGainSliderBounds(int width, int height);
@@ -63,6 +71,9 @@ private:
 
     ReverbAudioProcessor &audioProcessor;
     CustomLookAndFeel reverbLookAndFeel;
+    
+    std::unique_ptr<juce::ImageButton> bypassButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassButtonAttachment;
     
     std::unique_ptr<juce::Slider> gainSlider;
     std::unique_ptr<juce::Label> gainSliderLabel;
@@ -101,6 +112,7 @@ private:
     std::unique_ptr<juce::Label> eqGraphLabel;
     
     juce::uint8 labelColour = 245;
+    juce::Colour noColour = juce::Colour(labelColour, labelColour, labelColour, 0.0f);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };

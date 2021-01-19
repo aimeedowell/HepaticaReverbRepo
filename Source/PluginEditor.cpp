@@ -11,6 +11,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
 , audioProcessor (p)
 , reverbLookAndFeel(CustomLookAndFeel())
+, bypassButton(std::make_unique<juce::ImageButton>())
 , gainSlider(std::make_unique<juce::Slider>())
 , gainSliderLabel(std::make_unique<juce::Label>())
 , panSlider(std::make_unique<juce::Slider>())
@@ -37,6 +38,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     
     setSize (830, 350);
     
+    AddBypassButton();
     AddGainSlider();
     AddWetDrySlider();
     AddReverbSizeSlider();
@@ -53,7 +55,9 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
     stopTimer();
-    gainSliderAttachment.reset(); //Delete parameter attachments before component is deleted else the attachment has no idea what it's dettaching from!!!
+    bypassButtonAttachment.reset(); //Delete parameter attachments before component is deleted else the attachment has no idea what it's dettaching from!!!
+    bypassButton.reset();
+    gainSliderAttachment.reset();
     gainSlider.reset();
     gainSliderLabel.reset();
     panSliderAttachment.reset();
@@ -91,6 +95,7 @@ void ReverbAudioProcessorEditor::resized()
     auto width = getWidth();
     auto height = getHeight();
     
+    SetBypassButtonBounds(width, height);
     SetGainSliderBounds(width, height);
     SetPanSliderBounds(width, height);
     SetWetDrySliderBounds(width, height);
@@ -113,6 +118,21 @@ void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
     juce::Image background = juce::ImageCache::getFromMemory(BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
     
     g.drawImageWithin(background, 0, 0, getWidth() ,getHeight(), false);
+}
+
+void ReverbAudioProcessorEditor::AddBypassButton()
+{
+    juce::Image bypassOffImage = juce::ImageCache::getFromMemory(BinaryData::BypassOff_PNG, BinaryData::BypassOff_PNGSize);
+    juce::Image bypassOnImage  = juce::ImageCache::getFromMemory(BinaryData::BypassOn_PNG, BinaryData::BypassOn_PNGSize);
+    
+    addAndMakeVisible(bypassButton.get());
+    bypassButton.get()->addListener(this);
+    bypassButton.get()->setImages(false, true, true, bypassOffImage, 0.9f, noColour, bypassOnImage, 0.5f, noColour, bypassOnImage, 1.0f, noColour);
+    bypassButton.get()->setClickingTogglesState(true);
+    
+    bypassButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                  , "bypassID"
+                                                                                                  , *bypassButton.get());
 }
 
 void ReverbAudioProcessorEditor::AddGainSlider()
@@ -164,6 +184,11 @@ void ReverbAudioProcessorEditor::AddWetDrySlider()
                                                                              , "wetDryID"
                                                                              , *wetDrySlider.get());
     
+}
+
+void ReverbAudioProcessorEditor::SetBypassButtonBounds(int width, int height)
+{
+    bypassButton->setBounds(width - 170, 10 , 200, 20);
 }
 
 void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)

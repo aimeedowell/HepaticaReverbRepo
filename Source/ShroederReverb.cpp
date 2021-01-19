@@ -74,85 +74,89 @@ void ShroederReverb::process(juce::AudioBuffer<float> &buffer) noexcept
     auto *wetSignalL = wetSignal.getWritePointer(0);
     auto *wetSignalR = wetSignal.getWritePointer(1);
     
-    juce::dsp::AudioBlock<float> dryBlock(buffer);
+    bool isBypassed = *treeParameters.getRawParameterValue("bypassID");
     
-    float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
-    
-    mixer->setWetMixProportion(dryWetLevel);
-    mixer->pushDrySamples(dryBlock);
-
-    for (int i = 0; i < buffer.getNumSamples(); ++i)
+    if(!isBypassed)
     {
-        const float input = (wetSignalL[i] + wetSignalR[i]) * gain;
-        float wetL = 0, wetR = 0;
+        juce::dsp::AudioBlock<float> dryBlock(buffer);
         
-        UpdateDamping();
+        float dryWetLevel = *treeParameters.getRawParameterValue("wetDryID")/100;
         
-        const float damp    = damping.getNextValue();
-        const float feedbck = feedback.getNextValue();
-        
-        float earlyGain = *treeParameters.getRawParameterValue("earlyReflectionsID")/100;
-        earlyReflectFeedback.setTargetValue(earlyGain);
-        
-        for (int j = 0; j < numAllPasses; ++j)  // run the early reflection allpass filters in series
-        {
-            wetL = earlyReflections[0][j].process(wetL, earlyReflectFeedback.getNextValue());
-            wetR = earlyReflections[1][j].process(wetR, earlyReflectFeedback.getNextValue());
-        }
+        mixer->setWetMixProportion(dryWetLevel);
+        mixer->pushDrySamples(dryBlock);
 
-        for (int j = 0; j < numCombs; ++j)  // accumulate the comb filters in parallel
+        for (int i = 0; i < buffer.getNumSamples(); ++i)
         {
-            wetL += comb[0][j].process(input, damp, feedbck);
-            wetR += comb[1][j].process(input, damp, feedbck);
-        }
-
-        for (int j = 0; j < numAllPasses; ++j)  // run the allpass filters in series
-        {
-            wetL = allPass[0][j].process(wetL, 0.5f);
-            wetR = allPass[1][j].process(wetR, 0.5f);
-        }
-
-        float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
-        delay.setTargetValue(preDelay);
-        
-        delayLine.setDelay(delay.getNextValue());
-        delayLine.pushSample(0, wetL);
-        delayLine.pushSample(1, wetR);
-    
-        wetL += delayLine.popSample(0, delay.getNextValue());
-        wetR += delayLine.popSample(1, delay.getNextValue());
-        
-        float panValue = *treeParameters.getRawParameterValue("panningID");
-        float panGain = 0.5 + (float(panValue)/200);
-        
-        auto leftAmp = std::sin((1 - panGain) * (M_PI/2));
-        auto rightAmp = std::sin(panGain * (M_PI/2));
+            const float input = (wetSignalL[i] + wetSignalR[i]) * gain;
+            float wetL = 0, wetR = 0;
             
-        wetL *= leftAmp;
-        wetR *= rightAmp;
-        
-        // Apply stereo widdening to the signals
-        float stereoWidth = *treeParameters.getRawParameterValue("stereoSpreadID")/100;
-        auto side = 0.5 * (wetL - wetR);
-        auto mid = 0.5 * (wetL + wetR);
-        auto scaledSide = stereoWidth * side;
-        auto scaledMid = (2 - stereoWidth) * mid;
+            UpdateDamping();
+            
+            const float damp    = damping.getNextValue();
+            const float feedbck = feedback.getNextValue();
+            
+            float earlyGain = *treeParameters.getRawParameterValue("earlyReflectionsID")/100;
+            earlyReflectFeedback.setTargetValue(earlyGain);
+            
+            for (int j = 0; j < numAllPasses; ++j)  // run the early reflection allpass filters in series
+            {
+                wetL = earlyReflections[0][j].process(wetL, earlyReflectFeedback.getNextValue());
+                wetR = earlyReflections[1][j].process(wetR, earlyReflectFeedback.getNextValue());
+            }
 
-        wetL = scaledMid + scaledSide;
-        wetR = scaledMid - scaledSide;
+            for (int j = 0; j < numCombs; ++j)  // accumulate the comb filters in parallel
+            {
+                wetL += comb[0][j].process(input, damp, feedbck);
+                wetR += comb[1][j].process(input, damp, feedbck);
+            }
+
+            for (int j = 0; j < numAllPasses; ++j)  // run the allpass filters in series
+            {
+                wetL = allPass[0][j].process(wetL, 0.5f);
+                wetR = allPass[1][j].process(wetR, 0.5f);
+            }
+
+            float preDelay = *treeParameters.getRawParameterValue("preDelayID") * 1000;
+            delay.setTargetValue(preDelay);
+            
+            delayLine.setDelay(delay.getNextValue());
+            delayLine.pushSample(0, wetL);
+            delayLine.pushSample(1, wetR);
         
-        wetSignalL[i] = wetL;
-        wetSignalR[i] = wetR;
+            wetL += delayLine.popSample(0, delay.getNextValue());
+            wetR += delayLine.popSample(1, delay.getNextValue());
+            
+            float panValue = *treeParameters.getRawParameterValue("panningID");
+            float panGain = 0.5 + (float(panValue)/200);
+            
+            auto leftAmp = std::sin((1 - panGain) * (M_PI/2));
+            auto rightAmp = std::sin(panGain * (M_PI/2));
+                
+            wetL *= leftAmp;
+            wetR *= rightAmp;
+            
+            // Apply stereo widdening to the signals
+            float stereoWidth = *treeParameters.getRawParameterValue("stereoSpreadID")/100;
+            auto side = 0.5 * (wetL - wetR);
+            auto mid = 0.5 * (wetL + wetR);
+            auto scaledSide = stereoWidth * side;
+            auto scaledMid = (2 - stereoWidth) * mid;
+
+            wetL = scaledMid + scaledSide;
+            wetR = scaledMid - scaledSide;
+            
+            wetSignalL[i] = wetL;
+            wetSignalR[i] = wetR;
+        }
+        juce::dsp::AudioBlock<float> wetBlock(wetSignal);
+        juce::dsp::ProcessContextReplacing<float> context(wetBlock);
+        
+        UpdateFilters();
+        
+        processorChain.process(juce::dsp::ProcessContextReplacing<float>(wetBlock));
+        
+        mixer->mixWetSamples(context.getOutputBlock());
     }
-    juce::dsp::AudioBlock<float> wetBlock(wetSignal);
-    juce::dsp::ProcessContextReplacing<float> context(wetBlock);
-    
-    UpdateFilters();
-    
-    processorChain.process(juce::dsp::ProcessContextReplacing<float>(wetBlock));
-    
-    mixer->mixWetSamples(context.getOutputBlock());
-
 }
 
 void ShroederReverb::UpdateDamping() noexcept

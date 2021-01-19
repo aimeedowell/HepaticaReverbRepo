@@ -9,6 +9,8 @@
       <FILE id="K8fnOO" name="HepaticaDot.PNG" compile="0" resource="1" file="Resources/HepaticaDot.PNG"/>
       <FILE id="glofl7" name="ModulationSlider.PNG" compile="0" resource="1"
             file="Resources/ModulationSlider.PNG"/>
+      <FILE id="tqxCUe" name="BypassOn.PNG" compile="0" resource="1" file="Resources/BypassOn.PNG"/>
+      <FILE id="x7kPCD" name="BypassOff.PNG" compile="0" resource="1" file="Resources/BypassOff.PNG"/>
       <FILE id="gAxsKc" name="HP.PNG" compile="0" resource="1" file="Resources/HP.PNG"/>
       <FILE id="za5brF" name="HPDown.PNG" compile="0" resource="1" file="Resources/HPDown.PNG"/>
       <FILE id="cBda1e" name="HS.PNG" compile="0" resource="1" file="Resources/HS.PNG"/>
