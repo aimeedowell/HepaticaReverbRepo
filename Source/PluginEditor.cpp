@@ -6,12 +6,12 @@
 #include "AudioVisualiserMeter.h"
 #include "Equalisation.h"
 #include "ModulationDial.h"
-#include "PresetBar.h"
 
 ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 : AudioProcessorEditor (&p)
 , audioProcessor (p)
 , reverbLookAndFeel(CustomLookAndFeel())
+, bypassButton(std::make_unique<juce::ImageButton>())
 , gainSlider(std::make_unique<juce::Slider>())
 , gainSliderLabel(std::make_unique<juce::Label>())
 , panSlider(std::make_unique<juce::Slider>())
@@ -31,7 +31,6 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 , dampingLabel(std::make_unique<juce::Label>())
 , leftAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
 , rightAudioMeter(std::make_unique<AudioVisualiserMeter>(*this))
-, presetBar(std::make_unique<PresetBar>())
 , eqGraph(std::make_unique<Equalisation>(audioProcessor))
 , eqGraphLabel(std::make_unique<juce::Label>())
 {
@@ -39,6 +38,7 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     
     setSize (830, 350);
     
+    AddBypassButton();
     AddGainSlider();
     AddWetDrySlider();
     AddReverbSizeSlider();
@@ -47,7 +47,6 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
     AddModulationSliders();
     AddPanSlider();
     AddAudioVisualiser();
-    AddPresetBar();
     AddEqualisationGraph();
     
     startTimer(10);
@@ -56,7 +55,9 @@ ReverbAudioProcessorEditor::ReverbAudioProcessorEditor(ReverbAudioProcessor& p)
 ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
 {
     stopTimer();
-    gainSliderAttachment.reset(); //Delete parameter attachments before component is deleted else the attachment has no idea what it's dettaching from!!!
+    bypassButtonAttachment.reset(); //Delete parameter attachments before component is deleted else the attachment has no idea what it's dettaching from!!!
+    bypassButton.reset();
+    gainSliderAttachment.reset();
     gainSlider.reset();
     gainSliderLabel.reset();
     panSliderAttachment.reset();
@@ -79,7 +80,6 @@ ReverbAudioProcessorEditor::~ReverbAudioProcessorEditor()
     damping.reset();
     leftAudioMeter.reset();
     rightAudioMeter.reset();
-    presetBar.reset();
     eqGraph.reset();
     eqGraphLabel.reset();
     setLookAndFeel(nullptr);
@@ -95,6 +95,7 @@ void ReverbAudioProcessorEditor::resized()
     auto width = getWidth();
     auto height = getHeight();
     
+    SetBypassButtonBounds(width, height);
     SetGainSliderBounds(width, height);
     SetPanSliderBounds(width, height);
     SetWetDrySliderBounds(width, height);
@@ -117,12 +118,36 @@ void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
     juce::Image background = juce::ImageCache::getFromMemory(BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
     
     g.drawImageWithin(background, 0, 0, getWidth() ,getHeight(), false);
+    DrawTitle(g);
+}
+
+void ReverbAudioProcessorEditor::DrawTitle(juce::Graphics &g)
+{
+    juce::Rectangle<float> rect;
+    rect.setBounds(getWidth()/2 - 100, 10, 200, 35);
+    g.drawImage(title, rect, juce::RectanglePlacement::stretchToFit, false);
+}
+
+void ReverbAudioProcessorEditor::AddBypassButton()
+{
+    juce::Image bypassOffImage = juce::ImageCache::getFromMemory(BinaryData::BypassOff_PNG, BinaryData::BypassOff_PNGSize);
+    juce::Image bypassOnImage  = juce::ImageCache::getFromMemory(BinaryData::BypassOn_PNG, BinaryData::BypassOn_PNGSize);
+    
+    addAndMakeVisible(bypassButton.get());
+    bypassButton.get()->addListener(this);
+    bypassButton.get()->setImages(false, true, true, bypassOffImage, 0.9f, noColour, bypassOnImage, 0.5f, noColour, bypassOnImage, 1.0f, noColour);
+    bypassButton.get()->setClickingTogglesState(true);
+    
+    bypassButtonAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.GetValueTreeState()
+                                                                                                  , "bypassID"
+                                                                                                  , *bypassButton.get());
 }
 
 void ReverbAudioProcessorEditor::AddGainSlider()
 {
     addAndMakeVisible(gainSlider.get());
     addAndMakeVisible(gainSliderLabel.get());
+    gainSliderLabel->setInterceptsMouseClicks(false, false);
     gainSliderLabel->setText("Gain", juce::dontSendNotification);
     gainSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     gainSlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -139,6 +164,8 @@ void ReverbAudioProcessorEditor::AddPanSlider()
     addAndMakeVisible(panSlider.get());
     addAndMakeVisible(leftPanSliderLabel.get());
     addAndMakeVisible(rightPanSliderLabel.get());
+    leftPanSliderLabel->setInterceptsMouseClicks(false, false);
+    rightPanSliderLabel->setInterceptsMouseClicks(false, false);
     leftPanSliderLabel->setText("Left", juce::NotificationType::dontSendNotification);
     leftPanSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     rightPanSliderLabel->setText("Right", juce::NotificationType::dontSendNotification);
@@ -155,6 +182,7 @@ void ReverbAudioProcessorEditor::AddWetDrySlider()
 {
     addAndMakeVisible(wetDrySlider.get());
     addAndMakeVisible(drySliderLabel.get());
+    drySliderLabel->setInterceptsMouseClicks(false, false);
     drySliderLabel->setText("Mix", juce::dontSendNotification);
     drySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     wetDrySlider->setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -164,6 +192,11 @@ void ReverbAudioProcessorEditor::AddWetDrySlider()
                                                                              , "wetDryID"
                                                                              , *wetDrySlider.get());
     
+}
+
+void ReverbAudioProcessorEditor::SetBypassButtonBounds(int width, int height)
+{
+    bypassButton->setBounds(width - 170, 10 , 200, 20);
 }
 
 void ReverbAudioProcessorEditor::SetGainSliderBounds(int width, int height)
@@ -189,6 +222,7 @@ void ReverbAudioProcessorEditor::AddReverbSizeSlider()
 {
     addAndMakeVisible(reverbSizeSlider.get());
     addAndMakeVisible(reverbSizeSliderLabel.get());
+    reverbSizeSliderLabel->setInterceptsMouseClicks(false, false);
     reverbSizeSliderLabel->setText("Reverb Size", juce::NotificationType::dontSendNotification);
     reverbSizeSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     reverbSizeSlider->addListener(this);
@@ -202,6 +236,7 @@ void ReverbAudioProcessorEditor::AddPreDelaySlider()
 {
     addAndMakeVisible(preDelaySlider.get());
     addAndMakeVisible(preDelaySliderLabel.get());
+    preDelaySliderLabel->setInterceptsMouseClicks(false, false);
     preDelaySliderLabel->setText("Pre-Delay", juce::NotificationType::dontSendNotification);
     preDelaySliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     preDelaySlider->addListener(this);
@@ -215,6 +250,7 @@ void ReverbAudioProcessorEditor::AddEarlyReflectionsSlider()
 {
     addAndMakeVisible(earlyReflectionsSlider.get());
     addAndMakeVisible(earlyReflectionsSliderLabel.get());
+    earlyReflectionsSliderLabel->setInterceptsMouseClicks(false, false);
     earlyReflectionsSliderLabel->setText("Early Reflections", juce::NotificationType::dontSendNotification);
     earlyReflectionsSliderLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     earlyReflectionsSlider->addListener(this);
@@ -248,7 +284,8 @@ void ReverbAudioProcessorEditor::AddModulationSliders()
     addAndMakeVisible(damping.get());
     addAndMakeVisible(stereoSpreadLabel.get());
     addAndMakeVisible(dampingLabel.get());
-    
+    stereoSpreadLabel->setInterceptsMouseClicks(false, false);
+    dampingLabel->setInterceptsMouseClicks(false, false);
     stereoSpreadLabel->setText("Stereo Spread", juce::NotificationType::dontSendNotification);
     stereoSpreadLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     dampingLabel->setText("Damping", juce::NotificationType::dontSendNotification);
@@ -284,19 +321,11 @@ void ReverbAudioProcessorEditor::SetAudioVisualiserBounds(AudioVisualiserMeter *
     meter->setBounds(getWidth() - meterPosition, 30 + yPosition, meterWidth, meterHeight);
 }
 
-void ReverbAudioProcessorEditor::AddPresetBar()
-{
-    addAndMakeVisible(presetBar.get());
-    auto position = getWidth()/2 - presetBar->GetPresetBarWidth()/2;
-    presetBar.get()->setBounds(position, 15, presetBar->GetPresetBarWidth(), presetBar->GetPresetBarHeight());
-}
-
-
 void ReverbAudioProcessorEditor::AddEqualisationGraph()
 {
     addAndMakeVisible(eqGraphLabel.get());
     addAndMakeVisible(eqGraph.get());
-    
+    eqGraphLabel->setInterceptsMouseClicks(false, false);
     eqGraphLabel->setText("Equalisation", juce::NotificationType::dontSendNotification);
     eqGraphLabel->setColour(juce::Label::textColourId, juce::Colour(labelColour, labelColour, labelColour, 0.6f));
     

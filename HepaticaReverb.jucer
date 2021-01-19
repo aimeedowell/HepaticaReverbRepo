@@ -7,14 +7,11 @@
     <GROUP id="{592ABEC2-B00D-EAD4-9EBA-C84885F681BC}" name="Resources">
       <FILE id="KQlk4S" name="Hepatica.PNG" compile="0" resource="1" file="Resources/Hepatica.PNG"/>
       <FILE id="K8fnOO" name="HepaticaDot.PNG" compile="0" resource="1" file="Resources/HepaticaDot.PNG"/>
-      <FILE id="Yt2GLA" name="HepaticaNextDown.PNG" compile="0" resource="1"
-            file="Resources/HepaticaNextDown.PNG"/>
-      <FILE id="YAkmTM" name="HepaticaPrevDown.PNG" compile="0" resource="1"
-            file="Resources/HepaticaPrevDown.PNG"/>
-      <FILE id="Ddr1Fx" name="NextPreset.PNG" compile="0" resource="1" file="Resources/NextPreset.PNG"/>
-      <FILE id="ZWQ3FE" name="PrevPreset.PNG" compile="0" resource="1" file="Resources/PrevPreset.PNG"/>
+      <FILE id="rmkyG4" name="Title.PNG" compile="0" resource="1" file="Resources/Title.PNG"/>
       <FILE id="glofl7" name="ModulationSlider.PNG" compile="0" resource="1"
             file="Resources/ModulationSlider.PNG"/>
+      <FILE id="tqxCUe" name="BypassOn.PNG" compile="0" resource="1" file="Resources/BypassOn.PNG"/>
+      <FILE id="x7kPCD" name="BypassOff.PNG" compile="0" resource="1" file="Resources/BypassOff.PNG"/>
       <FILE id="gAxsKc" name="HP.PNG" compile="0" resource="1" file="Resources/HP.PNG"/>
       <FILE id="za5brF" name="HPDown.PNG" compile="0" resource="1" file="Resources/HPDown.PNG"/>
       <FILE id="cBda1e" name="HS.PNG" compile="0" resource="1" file="Resources/HS.PNG"/>
@@ -53,8 +50,6 @@
             file="Source/ModulationDial.cpp"/>
       <FILE id="vBCkZB" name="ModulationDial.h" compile="0" resource="0"
             file="Source/ModulationDial.h"/>
-      <FILE id="Ywyu6V" name="PresetBar.cpp" compile="1" resource="0" file="Source/PresetBar.cpp"/>
-      <FILE id="V1EbZt" name="PresetBar.h" compile="0" resource="0" file="Source/PresetBar.h"/>
       <FILE id="AgLwGt" name="AllPassFilter.h" compile="0" resource="0" file="Source/AllPassFilter.h"/>
       <FILE id="lIY1Hl" name="CombFilter.h" compile="0" resource="0" file="Source/CombFilter.h"/>
       <FILE id="pGtcmr" name="ShroederReverb.h" compile="0" resource="0"

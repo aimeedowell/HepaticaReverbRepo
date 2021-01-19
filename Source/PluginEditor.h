@@ -1,5 +1,16 @@
 //PluginEditor.h
 
+/*
+ This class controls the graphical interface of the plugin.
+ 
+ A custom look and feel class is initialised here to override any default methods for the sliders, the equalisation class is also initalised here and the modulation dials are initalised for the rotary sliders which want a different style.
+ 
+ The audio visualiser meter is also initialised here and is updated using a juce::Timer every 10ms. As the editor takes a reference to the PluginProcessor, values from the small amplitude buffer can be sent to each audio visualiser object. There are two visualiser objects, one for the left channel, and one for the right channel.
+
+ Image buttons have been created using PNG images, drawn by the author in Procreate. In cases where only one button should be selected at a time, it is assigned to a radio button group ID.
+ 
+ */
+
 #pragma once
 
 #include <JuceHeader.h>
@@ -9,12 +20,12 @@
 class AudioVisualiserMeter;
 class Equalisation;
 class ModulationDial;
-class PresetBar;
 class ReverbAudioProcessor;
 
 class ReverbAudioProcessorEditor
     : public juce::AudioProcessorEditor
     , public juce::Slider::Listener
+    , public juce::Button::Listener
     , private juce::Timer
 {
 public:
@@ -28,6 +39,10 @@ public:
     //juce::Slider
     void sliderValueChanged(juce::Slider* slider) override {};
     
+    //juce::ButtonListener
+    void buttonClicked(juce::Button*) override {};
+    void buttonStateChanged(juce::Button*) override {};
+    
     //juce::Timer
     void timerCallback() override;
     
@@ -35,6 +50,10 @@ public:
 
 private:
     void AddCommonPluginBackground(juce::Graphics &g);
+    void DrawTitle(juce::Graphics &g);
+    
+    void AddBypassButton();
+    void SetBypassButtonBounds(int width, int height);
     
     void AddGainSlider();
     void SetGainSliderBounds(int width, int height);
@@ -58,13 +77,14 @@ private:
     void SetModulationSliderBounds(int width, int height);
     
     void AddAudioVisualiser();
-    
-    void AddPresetBar();
 
     void AddEqualisationGraph();
 
     ReverbAudioProcessor &audioProcessor;
     CustomLookAndFeel reverbLookAndFeel;
+    
+    std::unique_ptr<juce::ImageButton> bypassButton;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassButtonAttachment;
     
     std::unique_ptr<juce::Slider> gainSlider;
     std::unique_ptr<juce::Label> gainSliderLabel;
@@ -99,12 +119,13 @@ private:
     std::unique_ptr<AudioVisualiserMeter> leftAudioMeter;
     std::unique_ptr<AudioVisualiserMeter> rightAudioMeter;
     
-    std::unique_ptr<PresetBar> presetBar;
-    
     std::unique_ptr<Equalisation> eqGraph;
     std::unique_ptr<juce::Label> eqGraphLabel;
     
+    juce::Image title = juce::ImageCache::getFromMemory(BinaryData::Title_PNG, BinaryData::Title_PNGSize);
+    
     juce::uint8 labelColour = 245;
+    juce::Colour noColour = juce::Colour(labelColour, labelColour, labelColour, 0.0f);
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbAudioProcessorEditor)
 };

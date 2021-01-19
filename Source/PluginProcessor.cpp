@@ -129,14 +129,13 @@ void ReverbAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    AddGainProcessing(buffer);
+    AddGainProcessing(buffer); //input gain
     
-    myReverb->process(buffer);
+    myReverb->process(buffer); //reverb processing
 
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
-        //auto* channelData = buffer.getWritePointer (channel);
-
+        //Fill buffer amplitude array for audio visualiser to use
         if (channel == 0)
             bufferAmplitude[0] = buffer.getMagnitude(channel, 0, buffer.getNumSamples());
         else if (channel == 1)
@@ -156,12 +155,10 @@ juce::AudioProcessorEditor* ReverbAudioProcessor::createEditor()
 
 void ReverbAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
-    juce::MemoryOutputStream(destData, true).writeFloat(*valueTreeState.getRawParameterValue("gainID"));
 }
 
 void ReverbAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
-    *valueTreeState.getRawParameterValue("gainID") = juce::MemoryInputStream(data, static_cast<size_t>(sizeInBytes), false).readFloat();
 }
 
 juce::AudioProcessorValueTreeState &ReverbAudioProcessor::GetValueTreeState()
@@ -200,11 +197,14 @@ const juce::AudioProcessorValueTreeState::ParameterLayout ReverbAudioProcessor::
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("stereoSpreadID", // parameterID
                                                                      "Stereo Spread",   // parameter name
                                                                      juce::NormalisableRange<float>(-200.f, 200.f, 1.f), // min, max, stepsize
-                                                                     0.0f));  // default value)
+                                                                     100.0f));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterFloat>("dampingID", // parameterID
                                                                      "Damping",   // parameter name
                                                                      juce::NormalisableRange<float>(0.0f, 100.f, 1.f), // min, max, stepsize
                                                                      50.f));  // default value)
+    parameters.push_back(std::make_unique<juce::AudioParameterBool>("bypassID", // parameterID
+                                                                    "Bypass",   // parameter name
+                                                                    false));  // default value)
     parameters.push_back(std::make_unique<juce::AudioParameterBool>("noEQID", // parameterID
                                                                     "EQ off",   // parameter name
                                                                     true));  // default value)

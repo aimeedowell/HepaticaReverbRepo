@@ -6,6 +6,13 @@
 //  Copyright © 2020 Aimee Dowell. All rights reserved.
 //
 
+/*
+ A class which designs the graphics of an equalisation graph with radio type buttons to select between Low Pass, High Pass, Low Shelf and High Shelf IIR filters. Each button will update the graph using the paint method and graphics class to draw new lines. There is also an option to have no equalisation which will just draw a straight line.
+ 
+ The buttons contain PNG images created in procreate. 
+ 
+ */
+
 #ifndef Equalisation_h
 #define Equalisation_h
 
