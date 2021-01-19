@@ -7,6 +7,7 @@
     <GROUP id="{592ABEC2-B00D-EAD4-9EBA-C84885F681BC}" name="Resources">
       <FILE id="KQlk4S" name="Hepatica.PNG" compile="0" resource="1" file="Resources/Hepatica.PNG"/>
       <FILE id="K8fnOO" name="HepaticaDot.PNG" compile="0" resource="1" file="Resources/HepaticaDot.PNG"/>
+      <FILE id="rmkyG4" name="Title.PNG" compile="0" resource="1" file="Resources/Title.PNG"/>
       <FILE id="glofl7" name="ModulationSlider.PNG" compile="0" resource="1"
             file="Resources/ModulationSlider.PNG"/>
       <FILE id="tqxCUe" name="BypassOn.PNG" compile="0" resource="1" file="Resources/BypassOn.PNG"/>

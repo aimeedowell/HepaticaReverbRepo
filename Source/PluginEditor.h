@@ -40,6 +40,7 @@ public:
 
 private:
     void AddCommonPluginBackground(juce::Graphics &g);
+    void DrawTitle(juce::Graphics &g);
     
     void AddBypassButton();
     void SetBypassButtonBounds(int width, int height);
@@ -110,6 +111,8 @@ private:
     
     std::unique_ptr<Equalisation> eqGraph;
     std::unique_ptr<juce::Label> eqGraphLabel;
+    
+    juce::Image title = juce::ImageCache::getFromMemory(BinaryData::Title_PNG, BinaryData::Title_PNGSize);
     
     juce::uint8 labelColour = 245;
     juce::Colour noColour = juce::Colour(labelColour, labelColour, labelColour, 0.0f);

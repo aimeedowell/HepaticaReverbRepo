@@ -118,6 +118,14 @@ void ReverbAudioProcessorEditor::AddCommonPluginBackground(juce::Graphics &g)
     juce::Image background = juce::ImageCache::getFromMemory(BinaryData::CommonPluginBackground_PNG, BinaryData::CommonPluginBackground_PNGSize);
     
     g.drawImageWithin(background, 0, 0, getWidth() ,getHeight(), false);
+    DrawTitle(g);
+}
+
+void ReverbAudioProcessorEditor::DrawTitle(juce::Graphics &g)
+{
+    juce::Rectangle<float> rect;
+    rect.setBounds(getWidth()/2 - 100, 10, 200, 35);
+    g.drawImage(title, rect, juce::RectanglePlacement::stretchToFit, false);
 }
 
 void ReverbAudioProcessorEditor::AddBypassButton()
