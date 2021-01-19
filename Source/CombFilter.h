@@ -8,6 +8,12 @@
   ==============================================================================
 */
 
+/*
+ 
+ This class creates a simple comb filter. Like the all pass filter the size is determined on the delay of the filter and feedback is created by storing the previous value of the buffer. The buffer is initialsed to zero using the clear method before use. A damping variable is used to create a roll off effect for the mode.
+ 
+ */
+
 #pragma once
 #include <JuceHeader.h>
 

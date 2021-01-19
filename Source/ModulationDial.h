@@ -6,6 +6,10 @@
 //  Copyright © 2020 Aimee Dowell. All rights reserved.
 //
 
+/*
+ A class which designs a rotary slider with a new background and thumbwidth
+ */
+
 #ifndef ModulationDial_h
 #define ModulationDial_h
 

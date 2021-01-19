@@ -8,6 +8,11 @@
   ==============================================================================
 */
 
+/*
+ This class creates a simple all pass filter. The size of the buffer is determined through the delay value of the filter and stores the previous value of the buffer for use in feedback. A clear function has been created to the buffer is initialsed to zero on starting.
+ 
+ */
+
 #pragma once
 #include <JuceHeader.h>
 

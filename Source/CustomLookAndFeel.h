@@ -6,6 +6,16 @@
 //  Copyright © 2020 Aimee Dowell. All rights reserved.
 //
 
+/*
+ 
+ This class overrides the juce Look and Feel class which designs and draw aspects of GUI components. The class will override sliders to create a personalised look to the GUI.
+ For the main rotary sliders, flower images (drawn from the author using procreate) are drawn in the center of each slider and rotate depending on the slider position. The opacity of the flower changes depending on the mouse hover position.
+ For the left/right slider a film strip technique is used to create unique dotted track design.
+ The design of sliders changed based on the width.
+ 
+ */
+
+
 #ifndef CustomLookAndFeel_h
 #define CustomLookAndFeel_h
 

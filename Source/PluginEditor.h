@@ -1,5 +1,16 @@
 //PluginEditor.h
 
+/*
+ This class controls the graphical interface of the plugin.
+ 
+ A custom look and feel class is initialised here to override any default methods for the sliders, the equalisation class is also initalised here and the modulation dials are initalised for the rotary sliders which want a different style.
+ 
+ The audio visualiser meter is also initialised here and is updated using a juce::Timer every 10ms. As the editor takes a reference to the PluginProcessor, values from the small amplitude buffer can be sent to each audio visualiser object. There are two visualiser objects, one for the left channel, and one for the right channel.
+
+ Image buttons have been created using PNG images, drawn by the author in Procreate. In cases where only one button should be selected at a time, it is assigned to a radio button group ID.
+ 
+ */
+
 #pragma once
 
 #include <JuceHeader.h>
@@ -9,7 +20,6 @@
 class AudioVisualiserMeter;
 class Equalisation;
 class ModulationDial;
-class PresetBar;
 class ReverbAudioProcessor;
 
 class ReverbAudioProcessorEditor

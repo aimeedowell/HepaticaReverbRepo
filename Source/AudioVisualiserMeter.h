@@ -6,6 +6,13 @@
 //  Copyright © 2020 Aimee Dowell. All rights reserved.
 //
 
+/*
+  This class creates an audio visualiser meter which uses the peak amplitude from each processing block. A full image is created (by the author in procreate), the height cropped based on the amplitude value and then the component is repainted.
+ 
+ A reference to the editor is created to set the bounds of the component. The editor will control access to the Plugin Processor and to control the timer used to set the update frequency for the meter.
+ 
+ */
+
 #ifndef AudioVisualiserMeter_h
 #define AudioVisualiserMeter_h
 
